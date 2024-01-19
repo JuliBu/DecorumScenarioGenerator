@@ -4,6 +4,7 @@ class Room:
         self.wall_color = wall_color
         self.objects = []
         self.object_order = []
+        self.players = []
 
     def add_object(self, decorum_object):
         # Überprüfen, ob der Objekttyp bereits im Raum vorhanden ist
@@ -17,6 +18,13 @@ class Room:
         current_order = [obj.obj_type for obj in self.objects]
         return current_order == expected_order
 
+    def add_player(self, player):
+        if len(self.players) < 2:
+            self.players.append(player)
+        else:
+            raise ValueError(f"{self.name} can only have 2 players")
+
     def __str__(self):
         object_str = ', '.join(str(obj) for obj in self.objects)
-        return f"{self.name} (Wandfarbe: {self.wall_color}) - Objekte: {object_str}"
+        player_str = ', '.join(str(player) for player in self.players)
+        return f"{self.name} (Wall Color: {self.wall_color}) - Objects: {object_str} - Players: {player_str}"

@@ -6,17 +6,17 @@ class DecorumObject:
         ("Painting", "red", "Modern"),
         ("Painting", "green", "Antique"),
         ("Painting", "blue", "Retro"),
-        ("Painting", "yellow", "Selten"),
+        ("Painting", "yellow", "Rare"),
 
         ("Curiosity", "green", "Modern"),
         ("Curiosity", "blue", "Antique"),
         ("Curiosity", "yellow", "Retro"),
-        ("Curiosity", "red", "Selten"),
+        ("Curiosity", "red", "Rare"),
 
         ("Lamp", "blue", "Modern"),
         ("Lamp", "yellow", "Antique"),
         ("Lamp", "red", "Retro"),
-        ("Lamp", "green", "Selten"),
+        ("Lamp", "green", "Rare"),
     ]
     def __init__(self, obj_type, color, style):
         self.obj_type = obj_type
@@ -27,7 +27,3 @@ class DecorumObject:
 
     def __str__(self):
         return f"{self.color} {self.style} {self.obj_type}"
-
-# Beispiel für die Verwendung der Klasse
-obj1 = DecorumObject("Painting", "red", "Antique")
-print(obj1)
