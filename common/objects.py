@@ -23,7 +23,7 @@ class DecorumObject:
         self.color = color
         self.style = style
         if (self.obj_type, self.color, self.style) not in self.allowed_combinations:
-            raise ValueError("Ungültige Kombination für DecorumObject")
+            raise ValueError("Invalid Combination of DecorumObject")
 
     def __str__(self):
         return f"{self.color} {self.style} {self.obj_type}"
