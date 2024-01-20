@@ -1,39 +1,16 @@
-# Example usage of the classes
-from common.objects import DecorumObject
-from common.player import Player
+from common.constants import AVAILABLE_ROOMS, POSITIONS, OBJ_COLORS, OBJ_TYPES
+from common.objects import get_obj_style, DecorumObject
 from common.rooms import Room
 
-kitchen = Room("Kitchen", "red")
-bedroom1 = Room("Bedroom1", "blue")
-bedroom2 = Room("Bedroom2", "green")
 
-try:
-    obj1 = DecorumObject("Curiosity", "red", "Modern")
-    kitchen.add_object(obj1)
 
-    obj2 = DecorumObject("Painting", "green", "Antique")
-    bedroom1.add_object(obj2)
+for room_name in AVAILABLE_ROOMS:
+    for room_color in OBJ_COLORS:
+        room = Room(room_name, room_color)
+        for pos in POSITIONS:
+            obj_type = room.get_type_from_pos(pos)
+            for obj_color in OBJ_COLORS:
+                obj_style = get_obj_style(obj_color, obj_type)
+                deco_obj = DecorumObject(obj_type, obj_color, obj_style)
+                room.place_object(deco_obj)
 
-    obj3 = DecorumObject("Lamp", "blue", "Retro")
-    kitchen.add_object(obj3)
-
-    player1 = Player("Alice", "Bedroom1")
-    player2 = Player("Bob", "Bedroom1")
-
-    # Try adding more than 2 players to Bedroom1 (will raise ValueError)
-    player3 = Player("Charlie", "Bedroom1")
-    bedroom1.add_player(player1)
-    bedroom1.add_player(player2)
-    bedroom1.add_player(player3)
-
-    # Example usage of check_order
-    expected_order = ["Curiosity", "Painting", "Lamp"]
-    if kitchen.check_order(expected_order):
-        print(f"The object order in the {kitchen.name} is correct.")
-    else:
-        print(f"The object order in the {kitchen.name} is not correct.")
-
-    print(kitchen)
-    print(bedroom1)
-except ValueError as e:
-    print(e)
