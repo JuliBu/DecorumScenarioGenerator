@@ -1,15 +1,21 @@
+from typing import Optional, List, Union
+
+from common.constants import AVAILABLE_ROOMS, OBJ_COLORS, POSITIONS
 from common.objects import DecorumObject
 
 
 class Room:
-    def __init__(self, name: str, wall_color: str):
-        assert name in ["Bedroom1", "Bedroom2", "LivingRoom", "Kitchen"]
-        assert wall_color in ["red", "green", "yellow", "blue"]
+    def __init__(self, name: str, wall_color: str,
+                 left_object: Optional[DecorumObject] = None,
+                 middle_object: Optional[DecorumObject] = None,
+                 right_object: Optional[DecorumObject] = None):
+        assert name in AVAILABLE_ROOMS
+        assert wall_color in OBJ_COLORS
         self.name = name
         self.wall_color = wall_color
-        self.left_object = None
-        self.middle_object = None
-        self.right_object = None
+        self.left_object = left_object
+        self.middle_object = middle_object
+        self.right_object = right_object
         self.players = []
 
     def get_position_of_object(self, d_object: DecorumObject) -> str:
@@ -44,7 +50,7 @@ class Room:
                 return "right"
         raise ValueError(f"Could not get position for {self.name=}, {d_obj_type=}.")
 
-    def replace_object(self, decorum_object: DecorumObject):
+    def place_object(self, decorum_object: DecorumObject):
         room_pos = self.get_position_of_object(decorum_object)
         if room_pos == "left":
             self.left_object = decorum_object
@@ -55,10 +61,26 @@ class Room:
         else:
             raise ValueError("Room position is neither left nor midlle nor right.")
 
+    def get_object_from_pos(self, position: str) -> Union[DecorumObject, None]:
+        assert position in POSITIONS
+        if position == "left":
+            return self.left_object
+        elif position == "middle":
+            return self.middle_object
+        elif position == "right":
+            return self.right_object
+        else:
+            return None
 
-    def check_order(self, expected_order):
-        current_order = [obj.obj_type for obj in self.objects]
-        return current_order == expected_order
+    def get_all_obj_by_color(self, color: str) -> List[DecorumObject]:
+        output_objects = []
+        for pos in POSITIONS:
+            cur_obj = self.get_object_from_pos(pos)
+            if cur_obj is not None:
+                if cur_obj.color == color:
+                    output_objects.append(cur_obj)
+        return output_objects
+
 
     def add_player(self, player):
         assert len(self.players) < 2

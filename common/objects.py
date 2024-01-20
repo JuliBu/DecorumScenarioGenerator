@@ -1,6 +1,4 @@
 
-
-
 class DecorumObject:
     allowed_combinations = [
         ("Painting", "red", "Modern"),
@@ -18,6 +16,7 @@ class DecorumObject:
         ("Lamp", "red", "Retro"),
         ("Lamp", "green", "Rare"),
     ]
+
     def __init__(self, obj_type, color, style):
         self.obj_type = obj_type
         self.color = color
