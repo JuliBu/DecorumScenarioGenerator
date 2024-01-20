@@ -44,24 +44,27 @@ class Room:
                 return "right"
         raise ValueError(f"Could not get position for {self.name=}, {d_obj_type=}.")
 
-    def add_object(self, decorum_object: DecorumObject):
-        if decorum_object.obj_type in self.object_order:
-            raise ValueError(f"{decorum_object.obj_type} ist bereits im Raum vorhanden")
+    def replace_object(self, decorum_object: DecorumObject):
+        room_pos = self.get_position_of_object(decorum_object)
+        if room_pos == "left":
+            self.left_object = decorum_object
+        elif room_pos == "middle":
+            self.middle_object = decorum_object
+        elif room_pos == "right":
+            self.right_object = decorum_object
+        else:
+            raise ValueError("Room position is neither left nor midlle nor right.")
 
-        self.objects.append(decorum_object)
-        self.object_order.append(decorum_object.obj_type)
 
     def check_order(self, expected_order):
         current_order = [obj.obj_type for obj in self.objects]
         return current_order == expected_order
 
     def add_player(self, player):
-        if len(self.players) < 2:
-            self.players.append(player)
-        else:
-            raise ValueError(f"{self.name} can only have 2 players")
+        assert len(self.players) < 2
+        self.players.append(player)
 
     def __str__(self):
-        object_str = ', '.join(str(obj) for obj in self.objects)
         player_str = ', '.join(str(player) for player in self.players)
-        return f"{self.name} (Wall Color: {self.wall_color}) - Objects: {object_str} - Players: {player_str}"
+        return f"{self.name} (Wall Color: {self.wall_color})," \
+               f"Objects: {self.left_object=}, {self.middle_object=}, {self.right_object=}, Players: {player_str}"
