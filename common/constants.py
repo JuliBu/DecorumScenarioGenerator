@@ -2,7 +2,7 @@
 OBJ_COLORS = ["red", "green", "yellow", "blue"]
 AVAILABLE_ROOMS = ["bedroom1", "bedroom2", "livingroom", "kitchen"]
 POSITIONS = ["left", "middle", "right"]
-OBJ_TYPES = ["curiosity", "Painting", "Lamp"]
+OBJ_TYPES = ["curiosity", "painting", "lamp"]
 STYLES = ["modern", "antique", "retro", "rare"]
 
 ALLOWED_CURIOSITIES = [

@@ -2,7 +2,9 @@ from common.constants import ALLOWED_COMBINATIONS, OBJ_COLORS, OBJ_TYPES
 
 
 def get_obj_style(obj_color: str, obj_type: str) -> str:
-    assert obj_type in OBJ_TYPES
+    if obj_type not in OBJ_TYPES:
+        print("Debug")
+    # assert obj_type in OBJ_TYPES
     assert obj_color in OBJ_COLORS
     if obj_type == "painting":
         if obj_color == "red":

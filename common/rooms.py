@@ -1,6 +1,6 @@
 from typing import Optional, List, Union
 
-from common.constants import AVAILABLE_ROOMS, OBJ_COLORS, POSITIONS
+from common.constants import AVAILABLE_ROOMS, OBJ_COLORS, POSITIONS, STYLES
 from common.objects import DecorumObject
 
 
@@ -37,7 +37,7 @@ class Room:
                 return "lamp"
             elif pos == "right":
                 return "curiosity"
-        elif self.name == "LivingRoom":
+        elif self.name == "livingroom":
             if pos == "left":
                 return "curiosity"
             elif pos == "middle":
@@ -51,7 +51,7 @@ class Room:
                 return "painting"
             elif pos == "right":
                 return "curiosity"
-        raise ValueError(f"Could not type for {self.name=}, {pos=}.")
+        raise ValueError(f"Could not get type for {self.name=}, {pos=}.")
 
     def get_position_of_object(self, d_object: DecorumObject) -> str:
         d_obj_type = d_object.obj_type
@@ -69,7 +69,7 @@ class Room:
                 return "middle"
             elif self.name == "curiosity":
                 return  "right"
-        elif self.name == "LivingRoom":
+        elif self.name == "livingroom":
             if d_obj_type == "curiosity":
                 return "left"
             elif d_obj_type == "lamp":
@@ -119,6 +119,22 @@ class Room:
     def add_player(self, player):
         assert len(self.players) < 2
         self.players.append(player)
+
+    def get_nr_color_elements(self, color: str) -> int:
+        assert color in OBJ_COLORS
+        counter = 0
+        for d_object in [self.left_object, self.middle_object, self.right_object]:
+            if d_object is not None and d_object.color == color:
+                counter += 1
+        return counter + 1 if self.wall_color == color else counter
+
+    def get_nr_style_elements(self, style: str) -> int:
+        assert style in STYLES
+        counter = 0
+        for d_object in [self.left_object, self.middle_object, self.right_object]:
+            if d_object is not None and d_object.style == style:
+                counter += 1
+        return counter
 
     def __str__(self):
         player_str = ', '.join(str(player) for player in self.players)

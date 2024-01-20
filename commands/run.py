@@ -1,16 +1,14 @@
 from common.constants import AVAILABLE_ROOMS, POSITIONS, OBJ_COLORS, OBJ_TYPES
+from common.house import House
 from common.objects import get_obj_style, DecorumObject
 from common.rooms import Room
 
 
+init_bedroom1 = Room("bedroom1", "red")
+init_bedroom2 = Room("bedroom1", "green")
+init_livingroom = Room("livingroom", "green")
+init_kitchen = Room("kitchen", "blue")
 
-for room_name in AVAILABLE_ROOMS:
-    for room_color in OBJ_COLORS:
-        room = Room(room_name, room_color)
-        for pos in POSITIONS:
-            obj_type = room.get_type_from_pos(pos)
-            for obj_color in OBJ_COLORS:
-                obj_style = get_obj_style(obj_color, obj_type)
-                deco_obj = DecorumObject(obj_type, obj_color, obj_style)
-                room.place_object(deco_obj)
+house = House(init_bedroom1, init_bedroom2, init_livingroom, init_kitchen)
+house.iter_modifications()
 
