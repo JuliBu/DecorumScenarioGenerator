@@ -139,4 +139,4 @@ class Room:
     def __str__(self):
         player_str = ', '.join(str(player) for player in self.players)
         return f"{self.name} (Wall Color: {self.wall_color})," \
-               f"Objects: {self.left_object=}, {self.middle_object=}, {self.right_object=}, Players: {player_str}"
+               f"Objects: {str(self.left_object)=}, {str(self.middle_object)=}, {str(self.right_object)=}, Players: {player_str}"

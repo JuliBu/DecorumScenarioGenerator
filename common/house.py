@@ -19,12 +19,16 @@ class House:
             return True
 
     def iter_modifications(self):
+        mod_counter = 0
         for room in self.all_rooms:
             for room_color in OBJ_COLORS:
                 room.set_wall_color(room_color)
                 for pos in POSITIONS:
                     obj_type = room.get_type_from_pos(pos)
                     for obj_color in OBJ_COLORS:
+                        mod_counter += 1
+                        print(self)
+                        print(f"\n{mod_counter=}\n")
                         obj_style = get_obj_style(obj_color, obj_type)
                         deco_obj = DecorumObject(obj_type, obj_color, obj_style)
                         room.place_object(deco_obj)
