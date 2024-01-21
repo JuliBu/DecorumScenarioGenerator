@@ -65,10 +65,10 @@ class Room:
         elif self.name == "bedroom2":
             if d_obj_type == "painting":
                 return "left"
-            elif self.name == "lamp":
+            elif d_obj_type == "lamp":
                 return "middle"
-            elif self.name == "curiosity":
-                return  "right"
+            elif d_obj_type == "curiosity":
+                return "right"
         elif self.name == "livingroom":
             if d_obj_type == "curiosity":
                 return "left"
@@ -87,14 +87,26 @@ class Room:
 
     def place_object(self, decorum_object: DecorumObject):
         room_pos = self.get_position_of_object(decorum_object)
-        if room_pos == "left":
+        if room_pos is None:
+            return
+        elif room_pos == "left":
             self.left_object = decorum_object
         elif room_pos == "middle":
             self.middle_object = decorum_object
         elif room_pos == "right":
             self.right_object = decorum_object
         else:
-            raise ValueError("Room position is neither left nor midlle nor right.")
+            raise ValueError("Room position is neither left nor middle nor right.")
+
+    def remove_object_from_pos(self, pos: str):
+        assert pos in POSITIONS
+        if pos == "left":
+            self.left_object = None
+        elif pos == "middle":
+            self.middle_object = None
+        elif pos == "right":
+            self.right_object = None
+
 
     def get_object_from_pos(self, position: str) -> Union[DecorumObject, None]:
         assert position in POSITIONS
