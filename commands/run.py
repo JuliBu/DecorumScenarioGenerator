@@ -5,20 +5,13 @@ from tqdm import tqdm
 from common.constants import AVAILABLE_ROOMS, POSITIONS, OBJ_COLORS
 from house.house import House
 from house.objects import get_obj_style, DecorumObject
-from house.rooms import Room
+from house.rooms.rooms import Room
 
 init_bedroom1 = Room("bedroom1", "red")
 init_bedroom2 = Room("bedroom1", "green")
 init_livingroom = Room("livingroom", "green")
 init_kitchen = Room("kitchen", "blue")
 
-
-def create_and_place_objects(room, color_combination):
-    for pos, color in zip(['left', 'middle', 'right'], color_combination):
-        obj_type = room.get_type_from_pos(pos)
-        obj_style = get_obj_style(color, obj_type)
-        if obj_style is not None:
-            room.place_object(DecorumObject(obj_type, color, obj_style))
 
 def iter_modifications():
     wall_colors = OBJ_COLORS
@@ -39,6 +32,13 @@ def iter_modifications():
                 create_and_place_objects(room, color_combination)
 
             house.check_example_condition()
+
+def create_and_place_objects(room, color_combination):
+    for pos, color in zip(POSITIONS, color_combination):
+        obj_type = room.get_type_from_pos(pos)
+        obj_style = get_obj_style(color, obj_type)
+        if obj_style is not None:
+            room.place_object(DecorumObject(obj_type, color, obj_style))
 
 
 if __name__ == '__main__':

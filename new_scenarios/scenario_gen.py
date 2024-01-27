@@ -1,5 +1,5 @@
 from house.house import House
-from house.rooms import Room
+from house.rooms.rooms import Room
 
 
 def iter_modifications():

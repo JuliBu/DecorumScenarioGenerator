@@ -20,8 +20,6 @@ class Room:
         self.middle_object = middle_object
         self.right_object = right_object
         self.players = []
-        self.object_combinations = list(itertools.product(OBJ_COLORS + [None], repeat=len(POSITIONS)))
-        self.room_combination = deepcopy(self.object_combinations)
 
     def set_wall_color(self, new_color: str):
         assert new_color in OBJ_COLORS
@@ -154,20 +152,7 @@ class Room:
         return counter
 
     # Functions to modify room_combinations
-    def filter_items_by_color_and_quantity(self, nr_items: int, color: str, mode: str):
-        assert 0 < nr_items < 4
-        assert color in OBJ_COLORS
-        assert mode in ["min", "max"]
 
-        new_combs = []
-        for obj_comb in self.object_combinations:
-            if mode == "min" and obj_comb.count(color) >= nr_items:
-                new_combs.append(obj_comb)
-            elif mode == "max" and obj_comb.count(color) <= nr_items:
-                new_combs.append(obj_comb)
-
-        check_for_empty_list(new_combs)
-        self.object_combinations = new_combs
 
     def __str__(self):
         player_str = ', '.join(str(player) for player in self.players)
