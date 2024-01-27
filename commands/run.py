@@ -3,9 +3,9 @@ import itertools
 from tqdm import tqdm
 
 from common.constants import AVAILABLE_ROOMS, POSITIONS, OBJ_COLORS
-from common.house import House
-from common.objects import get_obj_style, DecorumObject
-from common.rooms import Room
+from house.house import House
+from house.objects import get_obj_style, DecorumObject
+from house.rooms import Room
 
 init_bedroom1 = Room("bedroom1", "red")
 init_bedroom2 = Room("bedroom1", "green")

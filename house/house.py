@@ -1,7 +1,7 @@
 import itertools
 
 from common.constants import OBJ_COLORS, AVAILABLE_ROOMS
-from common.rooms import Room
+from house.rooms import Room
 
 
 class House:

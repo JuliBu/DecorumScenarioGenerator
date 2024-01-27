@@ -3,7 +3,7 @@ from copy import deepcopy
 from typing import Optional, List, Union
 
 from common.constants import AVAILABLE_ROOMS, OBJ_COLORS, POSITIONS, STYLES
-from common.objects import DecorumObject
+from house.objects import DecorumObject
 from common.utils import check_for_empty_list
 
 
