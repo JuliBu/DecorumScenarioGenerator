@@ -25,72 +25,8 @@ class Room:
         assert new_color in OBJ_COLORS
         self.wall_color = new_color
 
-    def get_type_from_pos(self, pos: str) -> str:
-        # Stay with if - elif format as dicts are way slower
-        if self.name == "bedroom1":
-            if pos == "left":
-                return "curiosity"
-            elif pos == "middle":
-                return "painting"
-            elif pos == "right":
-                return "lamp"
-        elif self.name == "bedroom2":
-            if pos == "left":
-                return "painting"
-            elif pos == "middle":
-                return "lamp"
-            elif pos == "right":
-                return "curiosity"
-        elif self.name == "livingroom":
-            if pos == "left":
-                return "curiosity"
-            elif pos == "middle":
-                return "lamp"
-            elif pos == "right":
-                return "painting"
-        elif self.name == "kitchen":
-            if pos == "left":
-                return "lamp"
-            elif pos == "middle":
-                return "painting"
-            elif pos == "right":
-                return "curiosity"
-        raise ValueError(f"Could not get type for {self.name=}, {pos=}.")
-
-    def get_position_of_object(self, d_object: DecorumObject) -> str:
-        d_obj_type = d_object.obj_type
-        if self.name == "bedroom1":
-            if d_obj_type == "curiosity":
-                return "left"
-            elif d_obj_type == "painting":
-                return "middle"
-            elif d_obj_type == "lamp":
-                return "right"
-        elif self.name == "bedroom2":
-            if d_obj_type == "painting":
-                return "left"
-            elif d_obj_type == "lamp":
-                return "middle"
-            elif d_obj_type == "curiosity":
-                return "right"
-        elif self.name == "livingroom":
-            if d_obj_type == "curiosity":
-                return "left"
-            elif d_obj_type == "lamp":
-                return "middle"
-            elif d_obj_type == "painting":
-                return "right"
-        elif self.name == "kitchen":
-            if d_obj_type == "lamp":
-                return "left"
-            elif d_obj_type == "painting":
-                return "middle"
-            elif d_obj_type == "curiosity":
-                return "right"
-        raise ValueError(f"Could not get position for {self.name=}, {d_obj_type=}.")
-
     def place_object(self, decorum_object: DecorumObject):
-        room_pos = self.get_position_of_object(decorum_object)
+        room_pos = get_position_of_object_from_room_and_type(self.name, decorum_object.obj_type)
         if room_pos is None:
             return
         elif room_pos == "left":
@@ -158,3 +94,73 @@ class Room:
         player_str = ', '.join(str(player) for player in self.players)
         return f"{self.name} (Wall Color: {self.wall_color})," \
                f"Objects: {str(self.left_object)=}, {str(self.middle_object)=}, {str(self.right_object)=}, Players: {player_str}"
+
+
+def get_type_from_room_and_pos(room_name: str, pos: str) -> str:
+    assert room_name in AVAILABLE_ROOMS
+    assert pos in POSITIONS
+
+    if room_name == "bedroom1":
+        if pos == "left":
+            return "curiosity"
+        elif pos == "middle":
+            return "painting"
+        elif pos == "right":
+            return "lamp"
+    elif room_name == "bedroom2":
+        if pos == "left":
+            return "painting"
+        elif pos == "middle":
+            return "lamp"
+        elif pos == "right":
+            return "curiosity"
+    elif room_name == "livingroom":
+        if pos == "left":
+            return "curiosity"
+        elif pos == "middle":
+            return "lamp"
+        elif pos == "right":
+            return "painting"
+    elif room_name == "kitchen":
+        if pos == "left":
+            return "lamp"
+        elif pos == "middle":
+            return "painting"
+        elif pos == "right":
+            return "curiosity"
+    raise ValueError(f"Could not get type for { room_name=}, {pos=}.")
+
+
+def get_position_of_object_from_room_and_type(room_name: str, d_obj_type: str) -> str:
+    assert room_name in AVAILABLE_ROOMS
+    assert d_obj_type in STYLES
+
+    if room_name == "bedroom1":
+        if d_obj_type == "curiosity":
+            return "left"
+        elif d_obj_type == "painting":
+            return "middle"
+        elif d_obj_type == "lamp":
+            return "right"
+    elif room_name == "bedroom2":
+        if d_obj_type == "painting":
+            return "left"
+        elif d_obj_type == "lamp":
+            return "middle"
+        elif d_obj_type == "curiosity":
+            return "right"
+    elif room_name == "livingroom":
+        if d_obj_type == "curiosity":
+            return "left"
+        elif d_obj_type == "lamp":
+            return "middle"
+        elif d_obj_type == "painting":
+            return "right"
+    elif room_name == "kitchen":
+        if d_obj_type == "lamp":
+            return "left"
+        elif d_obj_type == "painting":
+            return "middle"
+        elif d_obj_type == "curiosity":
+            return "right"
+    raise ValueError(f"Could not get position for { room_name=}, {d_obj_type=}.")
