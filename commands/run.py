@@ -1,4 +1,4 @@
-from combinations.room_combinations_lvl_obj import BedroomItemCombinations
+from combinations.room_combinations_lvl_obj import RoomItemCombinations
 from house.rooms.rooms import Room
 
 init_bedroom1 = Room("bedroom1", "red")
@@ -8,7 +8,7 @@ init_kitchen = Room("kitchen", "blue")
 
 
 def iter_modifications():
-    bedroom1_combs = BedroomItemCombinations('bedroom1')
+    bedroom1_combs = RoomItemCombinations('bedroom1')
     bedroom1_combs.filter_items_by_color_and_quantity(2, "blue", "max")
     bedroom1_combs.filter_items_by_color_and_quantity(1, "blue", "min")
     bedroom1_combs.filter_items_by_color_and_quantity(1, "red", "min")

@@ -1,4 +1,5 @@
 import itertools
+import random
 
 from common.constants import OBJ_COLORS, POSITIONS, STYLES, OBJ_TYPES
 from common.utils import check_for_empty_list
@@ -14,10 +15,10 @@ from house.rooms.rooms import get_type_from_room_and_pos
 #         self.bedroom2_combinations = list(itertools.product(self.object_combinations, wall_colors))
 
 
-class BedroomItemCombinations:
-    def __init__(self, bedroom_name: str):
+class RoomItemCombinations:
+    def __init__(self, room_name: str):
         self.object_combinations = list(itertools.product(OBJ_COLORS + [None], repeat=len(POSITIONS)))
-        self.bedroom_name = bedroom_name
+        self.room_name = room_name
 
     def filter_items_by_color_and_quantity(self, nr_items: int, color: str, mode: str):
         assert 0 <= nr_items <= 3
@@ -42,11 +43,11 @@ class BedroomItemCombinations:
         new_combs = []
         for obj_comb in self.object_combinations:
             # left_color, middle_color, right_color = obj_comb
-            # left_type, middle_type, right_type = [get_type_from_room_and_pos(self.bedroom_name, pos) for pos in ["left", "middle", "right"]]
+            # left_type, middle_type, right_type = [get_type_from_room_and_pos(self.room_name, pos) for pos in ["left", "middle", "right"]]
             # left_style, middle_style, right_style = [get_obj_style(color, obj_type) for color, obj_type in zip([left_color, middle_color, right_color], [left_type, middle_type, right_type])]
             # styles = [left_style, middle_style, right_style]
 
-            styles = [get_obj_style(color, get_type_from_room_and_pos(self.bedroom_name, pos)) for color, pos in
+            styles = [get_obj_style(color, get_type_from_room_and_pos(self.room_name, pos)) for color, pos in
                       zip(obj_comb, ["left", "middle", "right"])]
 
             if mode == "min" and styles.count(style) >= nr_items:
@@ -62,13 +63,23 @@ class BedroomItemCombinations:
         new_combs = []
         for obj_comb in self.object_combinations:
             left_color, middle_color, right_color = obj_comb
-            left_type, middle_type, right_type = [get_type_from_room_and_pos(self.bedroom_name, pos) for pos in ["left", "middle", "right"]]
+            left_type, middle_type, right_type = [get_type_from_room_and_pos(self.room_name, pos) for pos in ["left", "middle", "right"]]
             for obj_type, obj_color in zip([left_type, middle_type, right_type],
                                            [left_color, middle_color, right_color]):
                 if obj_type == type and (obj_color is not None) == should_be_available:
                     new_combs.append(obj_comb)
         check_for_empty_list(new_combs)
         self.object_combinations = new_combs
+
+    def get_random_method(self):
+        params = {
+            'nr_items': random.randint(0, 3),
+            'color': random.choice(OBJ_COLORS),
+            'mode': random.choice(["min", "max"]),
+            'style': random.choice(STYLES),
+            'obj_type': random.choice(OBJ_TYPES),
+            'should_be_available': random.choice([True, False])
+        }
 
     def __len__(self):
         return len(self.object_combinations)
@@ -77,10 +88,10 @@ class BedroomItemCombinations:
         return self.object_combinations
 
 
-class BedroomCombinationsWithWalls:
+class RoomCombinationsWithWalls:
     def __init__(self, item_combinations):
         wall_colors = OBJ_COLORS
-        self.bedroom_combinations = list(itertools.product(item_combinations, wall_colors))
+        self.room_wall_combinations = list(itertools.product(item_combinations, wall_colors))
 
 
 class UpperFloorCombinationsOnlyRooms:
