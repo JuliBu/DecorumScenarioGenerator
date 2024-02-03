@@ -1,11 +1,5 @@
-import itertools
-
-from tqdm import tqdm
-
-from common.constants import AVAILABLE_ROOMS, POSITIONS, OBJ_COLORS
-from house.house import House
-from house.objects import get_obj_style, DecorumObject
-from house.rooms.rooms import Room, get_type_from_room_and_pos
+from combinations.room_combinations_lvl_obj import BedroomItemCombinations
+from house.rooms.rooms import Room
 
 init_bedroom1 = Room("bedroom1", "red")
 init_bedroom2 = Room("bedroom1", "green")
@@ -14,31 +8,13 @@ init_kitchen = Room("kitchen", "blue")
 
 
 def iter_modifications():
-    wall_colors = OBJ_COLORS
-    wall_combinations = itertools.product(wall_colors, repeat=len(AVAILABLE_ROOMS))
-    object_combinations = itertools.product(OBJ_COLORS + [None], repeat=len(POSITIONS))
-    room_combinations = itertools.product(object_combinations, repeat=len(AVAILABLE_ROOMS))
-
-    for wall_combination in wall_combinations:
-        for room_combination in tqdm(room_combinations):
-            house = House(
-                Room('bedroom1', wall_combination[0]),
-                Room('bedroom2', wall_combination[1]),
-                Room('livingroom', wall_combination[2]),
-                Room('kitchen', wall_combination[3])
-            )
-
-            for room, color_combination in zip(house.all_rooms, room_combination):
-                create_and_place_objects(room, color_combination)
-
-            house.check_example_condition()
-
-def create_and_place_objects(room, color_combination):
-    for pos, color in zip(POSITIONS, color_combination):
-        obj_type = get_type_from_room_and_pos(room.name, pos)
-        obj_style = get_obj_style(color, obj_type)
-        if obj_style is not None:
-            room.place_object(DecorumObject(obj_type, color, obj_style))
+    bedroom1_combs = BedroomItemCombinations('bedroom1')
+    bedroom1_combs.filter_items_by_color_and_quantity(2, "blue", "max")
+    bedroom1_combs.filter_items_by_color_and_quantity(1, "blue", "min")
+    bedroom1_combs.filter_items_by_color_and_quantity(1, "red", "min")
+    bedroom1_combs.filter_availability_of_type("lamp", False)
+    print(len(bedroom1_combs))
+    print(bedroom1_combs)
 
 
 if __name__ == '__main__':

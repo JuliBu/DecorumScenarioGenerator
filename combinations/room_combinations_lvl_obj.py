@@ -70,6 +70,12 @@ class BedroomItemCombinations:
         check_for_empty_list(new_combs)
         self.object_combinations = new_combs
 
+    def __len__(self):
+        return len(self.object_combinations)
+
+    def __str__(self):
+        return self.object_combinations
+
 
 class BedroomCombinationsWithWalls:
     def __init__(self, item_combinations):
