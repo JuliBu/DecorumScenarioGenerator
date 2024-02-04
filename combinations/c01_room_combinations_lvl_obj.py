@@ -59,17 +59,18 @@ class RoomItemCombinations:
         for obj_comb in self.object_combinations:
             left_color, middle_color, right_color = obj_comb
             left_type, middle_type, right_type = [get_type_from_room_and_pos(self.room_name, pos) for pos in ["left", "middle", "right"]]
-            for obj_type, obj_color in zip([left_type, middle_type, right_type],
+            for obj_type_iter, obj_color in zip([left_type, middle_type, right_type],
                                            [left_color, middle_color, right_color]):
-                if obj_type == obj_type and (obj_color is not None) == should_be_available:
+                if obj_type_iter == obj_type and (obj_color is not None) == should_be_available:
                     new_combs.append(obj_comb)
         check_for_inval_cond(new_combs, len(self.object_combinations))
         self.object_combinations = new_combs
         return f"{self.room_name=}, {obj_type=}, {should_be_available=}"
 
     def get_random_method(self):
+        weighted_choices = [1, 1, 2, 2, 0, 3]
         params = {
-            'nr_items': random.randint(0, 3),
+            'nr_items': random.choice(weighted_choices),
             'color': random.choice(OBJ_COLORS),
             'mode': random.choice(["min", "max"]),
             'style': random.choice(STYLES),
@@ -84,7 +85,6 @@ class RoomItemCombinations:
         random_method = random.choice(methods)
         method_args = {param: params[param] for param in params if param in inspect.signature(random_method).parameters}
         return random_method(**method_args)
-
 
     def __len__(self):
         return len(self.object_combinations)
