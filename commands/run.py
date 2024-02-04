@@ -1,6 +1,7 @@
 import random
 
-from combinations.room_combinations_lvl_obj import RoomItemCombinations, RoomCombinationsWithWalls
+from combinations.c01_room_combinations_lvl_obj import RoomItemCombinations
+from combinations.c02_room_combinations_lvl_wall import RoomCombinationsWithWalls
 from house.rooms.rooms import Room
 
 init_bedroom1 = Room("bedroom1", "red")
