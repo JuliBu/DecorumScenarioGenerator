@@ -1,6 +1,8 @@
+import inspect
 import itertools
+import random
 
-from common.constants import OBJ_COLORS
+from common.constants import OBJ_COLORS, STYLES, OBJ_TYPES
 from common.utils import check_for_empty_list
 
 
@@ -26,6 +28,23 @@ class RoomCombinationsWithWalls:
 
         check_for_empty_list(new_combs)
         self.room_wall_combinations = new_combs
-        return f"{self.room_name=}, {nr_items=}, {mode=}"
+        return f"wall_color_cond: {self.room_name=}, {nr_items=}, {mode=}"
 
     # ToDo: ggf Funktion wie Wenn antikes Objekt in diesem Raum enthalten, darf die Wandfarbe nicht blau sein
+
+    def get_random_method(self):
+        weighted_choices = [1, 1, 2, 2, 0, 3]
+        params = {
+            'nr_items': random.choice(weighted_choices),
+            'color': random.choice(OBJ_COLORS),
+            'mode': random.choice(["min", "max"]),
+            'style': random.choice(STYLES),
+            'obj_type': random.choice(OBJ_TYPES),
+            'should_be_available': random.choice([True, False])
+        }
+        methods = [
+            self.filter_color_and_quantity_wall,
+        ]
+        random_method = random.choice(methods)
+        method_args = {param: params[param] for param in params if param in inspect.signature(random_method).parameters}
+        return random_method(**method_args)
