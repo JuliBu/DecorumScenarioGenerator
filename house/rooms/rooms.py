@@ -4,7 +4,7 @@ from typing import Optional, List, Union
 
 from common.constants import AVAILABLE_ROOMS, OBJ_COLORS, POSITIONS, STYLES
 from house.objects import DecorumObject
-from common.utils import check_for_empty_list
+from common.utils import check_for_inval_cond
 
 
 class Room:

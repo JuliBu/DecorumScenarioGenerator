@@ -3,7 +3,7 @@ import itertools
 import random
 
 from common.constants import OBJ_COLORS, STYLES, OBJ_TYPES
-from common.utils import check_for_empty_list
+from common.utils import check_for_inval_cond
 
 
 class RoomCombinationsWithWalls:
@@ -14,6 +14,14 @@ class RoomCombinationsWithWalls:
 
     def __len__(self):
         return len(self.room_wall_combinations)
+
+    def __str__(self):
+        out_str = ""
+        for obj_comb, wall_color in self.room_wall_combinations:
+            for obj_list in obj_comb:
+                out_str = out_str + str(obj_list) + ", "
+            out_str += f"{wall_color=}\n"
+        return out_str
 
     def filter_color_and_quantity_wall(self, nr_items: int, mode: str):
         assert 0 <= nr_items <= 3
@@ -26,7 +34,7 @@ class RoomCombinationsWithWalls:
             elif mode == "max" and obj_comb.count(wall_color) <= nr_items:
                 new_combs.append((obj_comb, wall_color))
 
-        check_for_empty_list(new_combs)
+        check_for_inval_cond(new_combs, len(self.room_wall_combinations))
         self.room_wall_combinations = new_combs
         return f"wall_color_cond: {self.room_name=}, {nr_items=}, {mode=}"
 

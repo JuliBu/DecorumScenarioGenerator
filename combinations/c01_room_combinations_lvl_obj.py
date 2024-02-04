@@ -3,7 +3,7 @@ import itertools
 import random
 
 from common.constants import OBJ_COLORS, POSITIONS, STYLES, OBJ_TYPES
-from common.utils import check_for_empty_list
+from common.utils import check_for_inval_cond
 from house.objects import get_obj_style
 from house.rooms.rooms import get_type_from_room_and_pos
 
@@ -25,7 +25,7 @@ class RoomItemCombinations:
             elif mode == "max" and obj_comb.count(color) <= nr_items:
                 new_combs.append(obj_comb)
 
-        check_for_empty_list(new_combs)
+        check_for_inval_cond(new_combs, len(self.object_combinations))
         self.object_combinations = new_combs
         return f"{self.room_name=}, {nr_items=}, {color=}, {mode=}"
 
@@ -49,7 +49,7 @@ class RoomItemCombinations:
             elif mode == "max" and styles.count(style) <= nr_items:
                 new_combs.append(obj_comb)
 
-        check_for_empty_list(new_combs)
+        check_for_inval_cond(new_combs, len(self.object_combinations))
         self.object_combinations = new_combs
         return f"{self.room_name=}, {nr_items=}, {style=}, {mode=}"
 
@@ -63,7 +63,7 @@ class RoomItemCombinations:
                                            [left_color, middle_color, right_color]):
                 if obj_type == obj_type and (obj_color is not None) == should_be_available:
                     new_combs.append(obj_comb)
-        check_for_empty_list(new_combs)
+        check_for_inval_cond(new_combs, len(self.object_combinations))
         self.object_combinations = new_combs
         return f"{self.room_name=}, {obj_type=}, {should_be_available=}"
 
