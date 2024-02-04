@@ -2,6 +2,7 @@ import random
 
 from combinations.c01_room_combinations_lvl_obj import RoomItemCombinations
 from combinations.c02_room_combinations_lvl_wall import RoomCombinationsWithWalls
+from combinations.c03_upper_floor_combinations_lvl_rooms import UpperFloorCombinationsOnlyRooms
 from common.constants import MAX_RETRIES
 from house.rooms.rooms import Room
 
@@ -22,7 +23,7 @@ def iter_modifications():
 
     # Getting conditions on room (object) level
     iterations = 0
-    while (len(bedroom1_combs) * len(bedroom2_combs) * len(livingroom_combs) * len(kitchen_combs) > 10000000 and iterations < MAX_RETRIES):
+    while (len(bedroom1_combs) * len(bedroom2_combs) * len(livingroom_combs) * len(kitchen_combs) > 10_000_000 and iterations < MAX_RETRIES):
         iterations += 1
         try:
             current_room = random.choice(rooms_combs)
@@ -43,7 +44,7 @@ def iter_modifications():
     wall_comb_rooms = [bedroom1_wall_combs, bedroom2_wall_combs, livingroom_wall_combs, kitchen_wall_combs]
 
     # Getting conditions on room (object + wall)
-    while (len(bedroom1_wall_combs) * len(bedroom2_wall_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs) > 10000000 and iterations < MAX_RETRIES):
+    while (len(bedroom1_wall_combs) * len(bedroom2_wall_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs) > 10_000_000 and iterations < MAX_RETRIES):
         iterations += 1
         try:
             current_room = random.choice(wall_comb_rooms)
@@ -56,24 +57,31 @@ def iter_modifications():
             print(f"{e}")
         # bedroom1_wall_combs.filter_color_and_quantity_wall(2, "min")
 
+    # Creating conditions for upper floor
+    upper_floor_combs = UpperFloorCombinationsOnlyRooms(bedroom1_wall_combs.room_wall_combinations, bedroom2_wall_combs.room_wall_combinations)
+    while (len(upper_floor_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs) > 1_000_000 and iterations < MAX_RETRIES):
+        iterations += 1
+        try:
+            current_cond = upper_floor_combs.get_random_method()
+            print(current_cond)
+            all_conds.append(current_cond)
+            print(len(upper_floor_combs))
+            print(len(upper_floor_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs))
 
+        except ValueError as e:
+            print(f"{e}")
 
     print("\n\nAll conditions:\n")
     for cond in all_conds:
         print(cond)
+    possible_solutions = len(upper_floor_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs)
+    print(f"possible solutions: {possible_solutions}")
     print("\nOne possible solution:\n")
-    for room in wall_comb_rooms:
-        print(f"{room.room_name}: {room.room_wall_combinations[0]}")
-
-
-
-    #ToDo: Debug -> why 3 list entries?
-    """
-    nr_items=2, color='blue', mode='max'
-obj_type='lamp', should_be_available=True
-nr_items=3, color='red', mode='min'
-nr_items=3, color='green', mode='max'
-"""
+    out_bedroom1, out_bedroom2 = upper_floor_combs.upper_floor_combinations_only_rooms[0]
+    out_livinroom = livingroom_wall_combs.room_wall_combinations[0]
+    out_kitchen = kitchen_wall_combs.room_wall_combinations[0]
+    for room in [out_bedroom1, out_bedroom2, out_livinroom, out_kitchen]:
+        print(room)
 
     # print(bedroom1_combs)
 
