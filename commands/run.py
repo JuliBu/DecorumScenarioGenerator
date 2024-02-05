@@ -39,7 +39,8 @@ def iter_modifications():
             print(len(current_room))
             print(len(bedroom1_combs) * len(bedroom2_combs) * len(livingroom_combs) * len(kitchen_combs))
         except ValueError as e:
-            print(f"{e}")
+            # print(f"{e}")
+            pass
 
     # Creating wall colors for all rooms
     bedroom1_wall_combs = RoomCombinationsWithWalls(bedroom1_combs.room_name, bedroom1_combs.object_combinations)
@@ -59,7 +60,8 @@ def iter_modifications():
             print(len(current_room))
             print(len(bedroom1_wall_combs) * len(bedroom2_wall_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs))
         except ValueError as e:
-            print(f"{e}")
+            # print(f"{e}")
+            pass
 
     # Creating conditions for upper floor
     upper_floor_combs = UpperFloorCombinationsOnlyRooms(bedroom1_wall_combs.room_wall_combinations, bedroom2_wall_combs.room_wall_combinations)
@@ -73,7 +75,8 @@ def iter_modifications():
             print(len(upper_floor_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs))
 
         except ValueError as e:
-            print(f"{e}")
+            # print(f"{e}")
+            pass
 
     # Creating player conditions
     upper_floor_player_combs = UpperFloorCombinationsWithPlayers(upper_floor_combs.upper_floor_combinations_only_rooms)
@@ -87,7 +90,8 @@ def iter_modifications():
             print(len(upper_floor_player_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs))
 
         except ValueError as e:
-            print(f"{e}")
+            # print(f"{e}")
+            pass
 
     # Creating house conditions
     house_combs = HouseCombinations(upper_floor_player_combs.upper_floor_combinations_with_players, livingroom_wall_combs.room_wall_combinations, kitchen_wall_combs.room_wall_combinations)
@@ -100,7 +104,8 @@ def iter_modifications():
             print(len(house_combs))
 
         except ValueError as e:
-            print(f"{e}")
+            # print(f"{e}")
+            pass
 
 
     print("\n\nAll conditions:\n")
