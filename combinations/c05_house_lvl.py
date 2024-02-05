@@ -14,7 +14,7 @@ class HouseCombinations:
     def __len__(self):
         return len(self.house_combs)
 
-    def house_color_elems(self, player: int, nr_elems_in_house: int, color: str, mode: str):
+    def house_color_elems(self, nr_elems_in_house: int, color: str, mode: str):
         assert 0 <= nr_elems_in_house <= 16
         assert color in OBJ_COLORS
         assert mode in ["min", "max"]
@@ -22,25 +22,18 @@ class HouseCombinations:
         new_combs = []
         for house_comb in self.house_combs:
             bedroom1, bedroom2, players_left, players_right, livingroom, kitchen = get_all_rooms_and_players_from_single_house_comb(house_comb)
-
-            if player in players_left:
-                color_counter = bedroom1[0].count(color)
-                if bedroom1[1] == color:
+            color_counter = 0
+            for room in [bedroom1, bedroom2, livingroom, kitchen]:
+                color_counter += room[0].count(color)
+                if room[1] == color:
                     color_counter += 1
-            elif player in players_right:
-                color_counter = bedroom2[0].count(color)
-                if bedroom2[1] == color:
-                    color_counter += 1
-            else:
-                raise KeyError(f"{player=} not in any room!")
-
             if mode == "min" and color_counter >= nr_elems_in_house:
                 new_combs.append(house_comb)
             elif mode == "max" and color_counter <= nr_elems_in_house:
                 new_combs.append(house_comb)
         check_for_inval_cond(new_combs, len(self.house_combs))
         self.house_combs = new_combs
-        return f"Players cond, {player=}, {nr_elems_in_house=}, {color=}, {mode=}"
+        return f"House cond, {nr_elems_in_house=}, {color=}, {mode=}"
 
     def get_random_method(self):
         weighted_choices = [
