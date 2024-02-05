@@ -2,16 +2,9 @@ import inspect
 import itertools
 import random
 
+from combinations.utils import get_rooms_and_players_from_single_upper_floor_combination_with_players
 from common.constants import OBJ_COLORS, STYLES, OBJ_TYPES
 from common.utils import check_for_inval_cond
-
-
-def get_rooms_and_players_from_comb(single_upper_floor_combination_with_players):
-    bedroom1 = single_upper_floor_combination_with_players[0][0]
-    bedroom2 = single_upper_floor_combination_with_players[0][1]
-    players_left = single_upper_floor_combination_with_players[1][0]
-    players_right = single_upper_floor_combination_with_players[1][1]
-    return bedroom1, bedroom2, players_left, players_right
 
 
 class UpperFloorCombinationsWithPlayers:
@@ -36,7 +29,8 @@ class UpperFloorCombinationsWithPlayers:
 
         new_combs = []
         for upper_floor_comb in self.upper_floor_combinations_with_players:
-            bedroom1, bedroom2, players_left, players_right = get_rooms_and_players_from_comb(upper_floor_comb)
+            bedroom1, bedroom2, players_left, players_right = get_rooms_and_players_from_single_upper_floor_combination_with_players(
+                upper_floor_comb)
             if player in players_left:
                 color_counter = bedroom1[0].count(color)
                 if bedroom1[1] == color:
