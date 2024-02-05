@@ -13,8 +13,8 @@ class UpperFloorCombinationsOnlyRooms:
     def __len__(self):
         return len(self.upper_floor_combinations_only_rooms)
 
-    def filter_floor_items_by_color_and_quantity(self, nr_items: int, color: str, mode: str):
-        assert 0 <= nr_items <= 6
+    def filter_floor_items_by_color_and_quantity(self, nr_elem_in_room: int, color: str, mode: str):
+        assert 0 <= nr_elem_in_room <= 4
         assert color in OBJ_COLORS
         assert mode in ["min", "max"]
 
@@ -22,16 +22,16 @@ class UpperFloorCombinationsOnlyRooms:
         for upper_floor in self.upper_floor_combinations_only_rooms:
             left_room, right_room = upper_floor
             color_counter = (left_room[0] + right_room[0]).count(color)
-            if mode == "min" and color_counter >= nr_items:
+            if mode == "min" and color_counter >= nr_elem_in_room:
                 new_combs.append(upper_floor)
-            elif mode == "max" and color_counter <= nr_items:
+            elif mode == "max" and color_counter <= nr_elem_in_room:
                 new_combs.append(upper_floor)
         check_for_inval_cond(new_combs, len(self.upper_floor_combinations_only_rooms))
         self.upper_floor_combinations_only_rooms = new_combs
-        return f"Upper floor, {nr_items=}, {color=}, {mode=}"
+        return f"Upper floor, {nr_elem_in_room=}, {color=}, {mode=}"
 
     def get_random_method(self):
-        weighted_choices = [
+        weighted_choices_items_on_floor = [
             0,
             1, 1,
             2, 2, 2,
@@ -40,8 +40,16 @@ class UpperFloorCombinationsOnlyRooms:
             5, 5,
             6
             ]
+        weighted_choices_elems_in_room = [
+            0,
+            1, 1,
+            2, 2,
+            3, 3,
+            4
+        ]
         params = {
-            'nr_items': random.choice(weighted_choices),
+            'nr_items': random.choice(weighted_choices_items_on_floor),
+            'nr_elem_in_room': random.choice(weighted_choices_elems_in_room),
             'color': random.choice(OBJ_COLORS),
             'mode': random.choice(["min", "max"]),
             'style': random.choice(STYLES),

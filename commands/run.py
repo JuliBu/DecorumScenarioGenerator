@@ -3,6 +3,8 @@ import random
 from combinations.c01_room_combinations_lvl_obj import RoomItemCombinations
 from combinations.c02_room_combinations_lvl_wall import RoomCombinationsWithWalls
 from combinations.c03_upper_floor_combinations_lvl_rooms import UpperFloorCombinationsOnlyRooms
+from combinations.c04_upper_floor_combinations_lvl_players import UpperFloorCombinationsWithPlayers, \
+    get_rooms_and_players_from_comb
 from common.constants import MAX_RETRIES
 from house.rooms.rooms import Room
 
@@ -34,7 +36,6 @@ def iter_modifications():
             print(len(bedroom1_combs) * len(bedroom2_combs) * len(livingroom_combs) * len(kitchen_combs))
         except ValueError as e:
             print(f"{e}")
-
 
     # Creating wall colors for all rooms
     bedroom1_wall_combs = RoomCombinationsWithWalls(bedroom1_combs.room_name, bedroom1_combs.object_combinations)
@@ -71,17 +72,35 @@ def iter_modifications():
         except ValueError as e:
             print(f"{e}")
 
+    # Creating player conditions
+    upper_floor_player_combs = UpperFloorCombinationsWithPlayers(upper_floor_combs.upper_floor_combinations_only_rooms)
+    while (len(upper_floor_player_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs) > 100_000 and iterations < MAX_RETRIES):
+        iterations += 1
+        try:
+            current_cond = upper_floor_player_combs.get_random_method()
+            print(current_cond)
+            all_conds.append(current_cond)
+            print(len(upper_floor_player_combs))
+            print(len(upper_floor_player_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs))
+
+        except ValueError as e:
+            print(f"{e}")
+
     print("\n\nAll conditions:\n")
     for cond in all_conds:
         print(cond)
-    possible_solutions = len(upper_floor_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs)
+
+    possible_solutions = len(upper_floor_player_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs)
     print(f"possible solutions: {possible_solutions}")
     print("\nOne possible solution:\n")
-    out_bedroom1, out_bedroom2 = upper_floor_combs.upper_floor_combinations_only_rooms[0]
+    out_bedroom1, out_bedroom2, players_left, players_right = get_rooms_and_players_from_comb(upper_floor_player_combs.upper_floor_combinations_with_players[0])
     out_livinroom = livingroom_wall_combs.room_wall_combinations[0]
     out_kitchen = kitchen_wall_combs.room_wall_combinations[0]
     for room in [out_bedroom1, out_bedroom2, out_livinroom, out_kitchen]:
         print(room)
+    for players in [players_left, players_right]:
+        print(players)
+
 
     # print(bedroom1_combs)
 
