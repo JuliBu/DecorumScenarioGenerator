@@ -1,0 +1,31 @@
+All Rooms! self.room_name='bedroom1', obj_type='curiosity', should_be_available=True
+All Rooms! self.room_name='bedroom1', obj_type='painting', should_be_available=True
+All Rooms! self.room_name='bedroom1', nr_items=2, style='antique', mode='min'
+Upper floor, nr_elem_in_room=1, color='blue', mode='max'
+Upper floor, nr_elem_in_room=1, color='blue', mode='min'
+Upper floor, nr_elem_in_room=1, color='yellow', mode='max'
+Upper floor, nr_elem_in_room=3, color='green', mode='max'
+Upper floor, nr_elem_in_room=2, color='green', mode='max'
+Upper floor, nr_elem_in_room=1, color='red', mode='max'
+Players cond, player=3, nr_items=1, color='yellow', mode='max'
+Players cond, player=2, nr_items=2, color='red', mode='min'
+Players cond, player=4, nr_items=2, color='green', mode='min'
+House cond, nr_elems_in_house=5, color='green', mode='max'
+House cond, nr_elems_in_house=4, color='blue', mode='min'
+House cond, nr_elems_in_house=4, color='blue', mode='max'
+House cond, nr_elems_in_house=6, color='yellow', mode='min'
+Number of conditions: 16
+possible solutions: 16
+
+One possible solution:
+
+(('red', 'green', 'yellow'), 'red')
+(('green', None, 'blue'), 'green')
+(('blue', 'yellow', 'yellow'), 'yellow')
+(('yellow', 'yellow', 'blue'), 'blue')
+{1, 2}
+{3, 4}
+
+Process finished with exit code 0
+
+

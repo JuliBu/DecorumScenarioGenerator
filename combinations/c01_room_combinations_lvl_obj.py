@@ -6,6 +6,7 @@ from common.constants import OBJ_COLORS, POSITIONS, STYLES, OBJ_TYPES
 from common.utils import check_for_inval_cond
 from house.objects import get_obj_style
 from house.rooms.rooms import get_type_from_room_and_pos
+from new_scenarios.config import USED_LANGUAGE, DEBUG_MODE
 
 
 class RoomItemCombinations:
@@ -13,7 +14,7 @@ class RoomItemCombinations:
         self.object_combinations = list(itertools.product(OBJ_COLORS + [None], repeat=len(POSITIONS)))
         self.room_name = room_name
 
-    def filter_items_by_color_and_quantity(self, nr_items: int, color: str, mode: str):
+    def filter_items_by_color_and_quantity(self, nr_items: int, color: str, mode: str, apply_for_all_rooms: bool = False):
         assert 0 <= nr_items <= 3
         assert color in OBJ_COLORS
         assert mode in ["min", "max"]
@@ -27,9 +28,24 @@ class RoomItemCombinations:
 
         check_for_inval_cond(new_combs, len(self.object_combinations))
         self.object_combinations = new_combs
-        return f"{self.room_name=}, {nr_items=}, {color=}, {mode=}"
+        if DEBUG_MODE:
+            return f"{self.room_name=}, {nr_items=}, {color=}, {mode=}"
+        if apply_for_all_rooms:
+            if USED_LANGUAGE == "german":
+                return f"In jedem Raum: {mode} {nr_items} Objekte mit der Farbe {color}."
+            elif USED_LANGUAGE == "english":
+                return f"In every room: {mode} {nr_items} objects in color {color}"
+            else:
+                raise NotImplementedError(f"{USED_LANGUAGE=} not defined for this function")
+        else:
+            if USED_LANGUAGE == "german":
+                return f"In Raum {self.room_name}: {mode} {nr_items} Objekte mit der Farbe {color}."
+            elif USED_LANGUAGE == "english":
+                return f"In room {self.room_name}: {mode} {nr_items} objects in color {color}"
+            else:
+                raise NotImplementedError(f"{USED_LANGUAGE=} not defined for this function")
 
-    def filter_items_by_style_and_quantity(self, nr_items: int, style: str, mode: str) -> str:
+    def filter_items_by_style_and_quantity(self, nr_items: int, style: str, mode: str, apply_for_all_rooms: bool = False) -> str:
         assert 0 <= nr_items <= 3
         assert style in STYLES
         assert mode in ["min", "max"]
@@ -51,9 +67,24 @@ class RoomItemCombinations:
 
         check_for_inval_cond(new_combs, len(self.object_combinations))
         self.object_combinations = new_combs
-        return f"{self.room_name=}, {nr_items=}, {style=}, {mode=}"
+        if DEBUG_MODE:
+            return f"{self.room_name=}, {nr_items=}, {style=}, {mode=}"
+        if apply_for_all_rooms:
+            if USED_LANGUAGE == "german":
+                return f"In jedem Raum: {mode} {nr_items} Objekte mit dem Stil {style}."
+            elif USED_LANGUAGE == "english":
+                return f"In every room: {mode} {nr_items} objects with style {style}"
+            else:
+                raise NotImplementedError(f"{USED_LANGUAGE=} not defined for this function")
+        else:
+            if USED_LANGUAGE == "german":
+                return f"In Raum {self.room_name}: {mode} {nr_items} Objekte mit dem Stil {style}."
+            elif USED_LANGUAGE == "english":
+                return f"In room {self.room_name}: {mode} {nr_items} objects with style {style}"
+            else:
+                raise NotImplementedError(f"{USED_LANGUAGE=} not defined for this function")
 
-    def filter_availability_of_type(self, obj_type: str, should_be_available: bool) -> str:
+    def filter_availability_of_type(self, obj_type: str, should_be_available: bool, apply_for_all_rooms: bool = False) -> str:
         assert obj_type in OBJ_TYPES
         new_combs = []
         for obj_comb in self.object_combinations:
@@ -65,7 +96,34 @@ class RoomItemCombinations:
                     new_combs.append(obj_comb)
         check_for_inval_cond(new_combs, len(self.object_combinations))
         self.object_combinations = new_combs
-        return f"{self.room_name=}, {obj_type=}, {should_be_available=}"
+        if DEBUG_MODE:
+            return f"{self.room_name=}, {obj_type=}, {should_be_available=}"
+        if apply_for_all_rooms:
+            if USED_LANGUAGE == "german":
+                if should_be_available:
+                    return f"In jedem Raum muss ein Objekt des Typs {obj_type} vorhanden sein."
+                else:
+                    return f"In keinem Raum darf ein Objekt des Typs {obj_type} vorhanden sein."
+            elif USED_LANGUAGE == "english":
+                if should_be_available:
+                    return f"In every single room, there has to be an object of type {obj_type}."
+                else:
+                    return f"In every single room, there has to be no object of type {obj_type}."
+            else:
+                raise NotImplementedError(f"{USED_LANGUAGE=} not defined for this function")
+        else:
+            if USED_LANGUAGE == "german":
+                if should_be_available:
+                    return f"In Raum {self.room_name} muss ein Objekt des Typs {obj_type} vorhanden sein."
+                else:
+                    return f"In Raum {self.room_name} darf kein Objekt des Typs {obj_type} vorhanden sein."
+            elif USED_LANGUAGE == "english":
+                if should_be_available:
+                    return f"In room {self.room_name}, there has to be an object of type {obj_type}."
+                else:
+                    return f"In room {self.room_name}, there has to be no object of type {obj_type}."
+            else:
+                raise NotImplementedError(f"{USED_LANGUAGE=} not defined for this function")
 
     def __len__(self):
         return len(self.object_combinations)

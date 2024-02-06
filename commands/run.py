@@ -1,4 +1,5 @@
 import random
+from copy import deepcopy
 
 from combinations.c01_room_combinations_lvl_obj import RoomItemCombinations, get_random_method_room_obj
 from combinations.c02_room_combinations_lvl_wall import RoomCombinationsWithWalls, \
@@ -6,13 +7,14 @@ from combinations.c02_room_combinations_lvl_wall import RoomCombinationsWithWall
 from combinations.c03_upper_floor_combinations_lvl_rooms import UpperFloorCombinationsOnlyRooms
 from combinations.c04_upper_floor_combinations_lvl_players import UpperFloorCombinationsWithPlayers
 from combinations.c05_house_lvl import HouseCombinations
-from combinations.utils import get_rooms_and_players_from_single_upper_floor_combination_with_players, \
-    get_all_rooms_and_players_from_single_house_comb
+from combinations.utils import get_all_rooms_and_players_from_single_house_comb
 from common.constants import MAX_RETRIES
 from house.rooms.rooms import Room
 from new_scenarios.config import MAX_ROOM_OBJ_COMBINATIONS, MAX_ROOM_WALL_COMBINATIONS, \
     MAX_UPPER_FLOOR_ROOM_COMBINATIONS, MAX_UPPER_FLOOR_PLAYER_COMBINATIONS, MAX_HOUSE_COMBINATIONS, \
-    CHANCE_OF_ALL_ROOM_COND
+    CHANCE_OF_ALL_ROOM_WALL_COND, CHANCE_OF_ALL_ROOM_OBJ_COND, SET_SEED
+
+random.seed(SET_SEED)
 
 init_bedroom1 = Room("bedroom1", "red")
 init_bedroom2 = Room("bedroom1", "green")
@@ -31,15 +33,28 @@ def iter_modifications():
 
     # Getting conditions on room (object) level
     iterations = 0
-    while (len(bedroom1_combs) * len(bedroom2_combs) * len(livingroom_combs) * len(kitchen_combs) > MAX_ROOM_OBJ_COMBINATIONS and iterations < MAX_RETRIES):
+    while (len(bedroom1_combs) * len(bedroom2_combs) * len(livingroom_combs) * len(kitchen_combs) > MAX_ROOM_OBJ_COMBINATIONS):
+        if iterations > MAX_RETRIES:
+            raise TimeoutError("iteration exceeded MAX_RETRIES")
         iterations += 1
         try:
-            current_room = random.choice(rooms_combs)
             rnd_method, method_args = get_random_method_room_obj()
-            current_cond = rnd_method(current_room, **method_args)
+            if random.random() < CHANCE_OF_ALL_ROOM_OBJ_COND:
+                method_args["apply_for_all_rooms"] = True
+                tmp_conds = []
+                fallback_rooms_combs = deepcopy(rooms_combs)
+                try:
+                    for room in rooms_combs:
+                        tmp_conds.append(rnd_method(room, **method_args))
+                    current_cond = tmp_conds[0]
+                except ValueError as e:
+                    rooms_combs = fallback_rooms_combs
+                    raise ValueError("One of all_room_obj conditions wasnt possible.")
+            else:
+                current_room = random.choice(rooms_combs)
+                current_cond = rnd_method(current_room, **method_args)
             print(current_cond)
             all_conds.append(current_cond)
-            print(len(current_room))
             print(len(bedroom1_combs) * len(bedroom2_combs) * len(livingroom_combs) * len(kitchen_combs))
         except ValueError as e:
             # print(f"{e}")
@@ -53,21 +68,28 @@ def iter_modifications():
     wall_comb_rooms = [bedroom1_wall_combs, bedroom2_wall_combs, livingroom_wall_combs, kitchen_wall_combs]
 
     # Getting conditions on room (object + wall)
-    while (len(bedroom1_wall_combs) * len(bedroom2_wall_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs) > MAX_ROOM_WALL_COMBINATIONS and iterations < MAX_RETRIES):
+    while (len(bedroom1_wall_combs) * len(bedroom2_wall_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs) > MAX_ROOM_WALL_COMBINATIONS):
+        if iterations > MAX_RETRIES:
+            raise TimeoutError("iteration exceeded MAX_RETRIES")
         iterations += 1
         try:
-            current_room = random.choice(wall_comb_rooms)
             rnd_method, method_args = get_random_method_room_with_wall()
-            if random.random() < CHANCE_OF_ALL_ROOM_COND:
+            if random.random() < CHANCE_OF_ALL_ROOM_WALL_COND:
+                method_args["apply_for_all_rooms"] = True
                 tmp_conds = []
-                for room in wall_comb_rooms:
-                    tmp_conds.append(rnd_method(room, **method_args))
-                current_cond = "All Rooms! " + tmp_conds[0]
+                fallback_wall_comb_rooms = deepcopy(wall_comb_rooms)
+                try:
+                    for room in wall_comb_rooms:
+                        tmp_conds.append(rnd_method(room, **method_args))
+                    current_cond = tmp_conds[len(wall_comb_rooms)-1]
+                except ValueError as e:
+                    wall_comb_rooms = fallback_wall_comb_rooms
+                    raise ValueError("One of all_room_wall conditions wasnt possible.")
             else:
+                current_room = random.choice(wall_comb_rooms)
                 current_cond = rnd_method(current_room, **method_args)
             print(current_cond)
             all_conds.append(current_cond)
-            print(len(current_room))
             print(len(bedroom1_wall_combs) * len(bedroom2_wall_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs))
         except ValueError as e:
             # print(f"{e}")
@@ -75,7 +97,9 @@ def iter_modifications():
 
     # Creating conditions for upper floor
     upper_floor_combs = UpperFloorCombinationsOnlyRooms(bedroom1_wall_combs.room_wall_combinations, bedroom2_wall_combs.room_wall_combinations)
-    while (len(upper_floor_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs) > MAX_UPPER_FLOOR_ROOM_COMBINATIONS and iterations < MAX_RETRIES):
+    while (len(upper_floor_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs) > MAX_UPPER_FLOOR_ROOM_COMBINATIONS):
+        if iterations > MAX_RETRIES:
+            raise TimeoutError("iteration exceeded MAX_RETRIES")
         iterations += 1
         try:
             current_cond = upper_floor_combs.get_random_method()
@@ -90,7 +114,9 @@ def iter_modifications():
 
     # Creating player conditions
     upper_floor_player_combs = UpperFloorCombinationsWithPlayers(upper_floor_combs.upper_floor_combinations_only_rooms)
-    while (len(upper_floor_player_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs) > MAX_UPPER_FLOOR_PLAYER_COMBINATIONS and iterations < MAX_RETRIES):
+    while (len(upper_floor_player_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs) > MAX_UPPER_FLOOR_PLAYER_COMBINATIONS):
+        if iterations > MAX_RETRIES:
+            raise TimeoutError("iteration exceeded MAX_RETRIES")
         iterations += 1
         try:
             current_cond = upper_floor_player_combs.get_random_method()
@@ -105,7 +131,9 @@ def iter_modifications():
 
     # Creating house conditions
     house_combs = HouseCombinations(upper_floor_player_combs.upper_floor_combinations_with_players, livingroom_wall_combs.room_wall_combinations, kitchen_wall_combs.room_wall_combinations)
-    while len(house_combs) > MAX_HOUSE_COMBINATIONS and iterations < MAX_RETRIES:
+    while len(house_combs) > MAX_HOUSE_COMBINATIONS:
+        if iterations > MAX_RETRIES:
+            raise TimeoutError("iteration exceeded MAX_RETRIES")
         iterations += 1
         try:
             current_cond = house_combs.get_random_method()
