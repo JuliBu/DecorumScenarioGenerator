@@ -67,25 +67,6 @@ class RoomItemCombinations:
         self.object_combinations = new_combs
         return f"{self.room_name=}, {obj_type=}, {should_be_available=}"
 
-    def get_random_method(self):
-        weighted_choices = [1, 1, 2, 2, 0, 3]
-        params = {
-            'nr_items': random.choice(weighted_choices),
-            'color': random.choice(OBJ_COLORS),
-            'mode': random.choice(["min", "max"]),
-            'style': random.choice(STYLES),
-            'obj_type': random.choice(OBJ_TYPES),
-            'should_be_available': random.choice([True, False])
-        }
-        methods = [
-            self.filter_items_by_color_and_quantity,
-            self.filter_items_by_style_and_quantity,
-            self.filter_availability_of_type
-        ]
-        random_method = random.choice(methods)
-        method_args = {param: params[param] for param in params if param in inspect.signature(random_method).parameters}
-        return random_method(**method_args)
-
     def __len__(self):
         return len(self.object_combinations)
 
@@ -96,6 +77,26 @@ class RoomItemCombinations:
                 out_str = out_str + str(obj_list) + ", "
             out_str += "\n"
         return out_str
+
+
+def get_random_method_room_obj():
+    weighted_choices = [1, 1, 2, 2, 0, 3]
+    params = {
+        'nr_items': random.choice(weighted_choices),
+        'color': random.choice(OBJ_COLORS),
+        'mode': random.choice(["min", "max"]),
+        'style': random.choice(STYLES),
+        'obj_type': random.choice(OBJ_TYPES),
+        'should_be_available': random.choice([True, False])
+    }
+    methods = [
+        RoomItemCombinations.filter_items_by_color_and_quantity,
+        RoomItemCombinations.filter_items_by_style_and_quantity,
+        RoomItemCombinations.filter_availability_of_type
+    ]
+    random_method = random.choice(methods)
+    method_args = {param: params[param] for param in params if param in inspect.signature(random_method).parameters}
+    return random_method, method_args
 
 
 

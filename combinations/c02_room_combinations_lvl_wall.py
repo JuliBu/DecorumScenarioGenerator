@@ -40,19 +40,20 @@ class RoomCombinationsWithWalls:
 
     # ToDo: ggf Funktion wie Wenn antikes Objekt in diesem Raum enthalten, darf die Wandfarbe nicht blau sein
 
-    def get_random_method(self):
-        weighted_choices = [1, 1, 2, 2, 0, 3]
-        params = {
-            'nr_items': random.choice(weighted_choices),
-            'color': random.choice(OBJ_COLORS),
-            'mode': random.choice(["min", "max"]),
-            'style': random.choice(STYLES),
-            'obj_type': random.choice(OBJ_TYPES),
-            'should_be_available': random.choice([True, False])
-        }
-        methods = [
-            self.filter_color_and_quantity_wall,
-        ]
-        random_method = random.choice(methods)
-        method_args = {param: params[param] for param in params if param in inspect.signature(random_method).parameters}
-        return random_method(**method_args)
+
+def get_random_method_room_with_wall():
+    weighted_choices = [1, 1, 2, 2, 0, 3]
+    params = {
+        'nr_items': random.choice(weighted_choices),
+        'color': random.choice(OBJ_COLORS),
+        'mode': random.choice(["min", "max"]),
+        'style': random.choice(STYLES),
+        'obj_type': random.choice(OBJ_TYPES),
+        'should_be_available': random.choice([True, False])
+    }
+    methods = [
+        RoomCombinationsWithWalls.filter_color_and_quantity_wall,
+    ]
+    random_method = random.choice(methods)
+    method_args = {param: params[param] for param in params if param in inspect.signature(random_method).parameters}
+    return random_method, method_args

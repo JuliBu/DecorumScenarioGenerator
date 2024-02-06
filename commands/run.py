@@ -1,7 +1,8 @@
 import random
 
-from combinations.c01_room_combinations_lvl_obj import RoomItemCombinations
-from combinations.c02_room_combinations_lvl_wall import RoomCombinationsWithWalls
+from combinations.c01_room_combinations_lvl_obj import RoomItemCombinations, get_random_method_room_obj
+from combinations.c02_room_combinations_lvl_wall import RoomCombinationsWithWalls, \
+    get_random_method_room_with_wall
 from combinations.c03_upper_floor_combinations_lvl_rooms import UpperFloorCombinationsOnlyRooms
 from combinations.c04_upper_floor_combinations_lvl_players import UpperFloorCombinationsWithPlayers
 from combinations.c05_house_lvl import HouseCombinations
@@ -10,7 +11,8 @@ from combinations.utils import get_rooms_and_players_from_single_upper_floor_com
 from common.constants import MAX_RETRIES
 from house.rooms.rooms import Room
 from new_scenarios.config import MAX_ROOM_OBJ_COMBINATIONS, MAX_ROOM_WALL_COMBINATIONS, \
-    MAX_UPPER_FLOOR_ROOM_COMBINATIONS, MAX_UPPER_FLOOR_PLAYER_COMBINATIONS, MAX_HOUSE_COMBINATIONS
+    MAX_UPPER_FLOOR_ROOM_COMBINATIONS, MAX_UPPER_FLOOR_PLAYER_COMBINATIONS, MAX_HOUSE_COMBINATIONS, \
+    CHANCE_OF_ALL_ROOM_COND
 
 init_bedroom1 = Room("bedroom1", "red")
 init_bedroom2 = Room("bedroom1", "green")
@@ -33,7 +35,8 @@ def iter_modifications():
         iterations += 1
         try:
             current_room = random.choice(rooms_combs)
-            current_cond = current_room.get_random_method()
+            rnd_method, method_args = get_random_method_room_obj()
+            current_cond = rnd_method(current_room, **method_args)
             print(current_cond)
             all_conds.append(current_cond)
             print(len(current_room))
@@ -54,7 +57,14 @@ def iter_modifications():
         iterations += 1
         try:
             current_room = random.choice(wall_comb_rooms)
-            current_cond = current_room.get_random_method()
+            rnd_method, method_args = get_random_method_room_with_wall()
+            if random.random() < CHANCE_OF_ALL_ROOM_COND:
+                tmp_conds = []
+                for room in wall_comb_rooms:
+                    tmp_conds.append(rnd_method(room, **method_args))
+                current_cond = "All Rooms! " + tmp_conds[0]
+            else:
+                current_cond = rnd_method(current_room, **method_args)
             print(current_cond)
             all_conds.append(current_cond)
             print(len(current_room))
