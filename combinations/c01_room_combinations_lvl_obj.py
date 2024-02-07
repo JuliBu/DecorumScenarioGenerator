@@ -2,7 +2,7 @@ import inspect
 import itertools
 import random
 
-from common.constants import OBJ_COLORS, POSITIONS, STYLES, OBJ_TYPES
+from common.constants import OBJ_COLORS, POSITIONS, STYLES, OBJ_TYPES, OBJ_ATTRIBUTES
 from common.utils import check_for_inval_cond
 from house.objects import get_obj_style
 from house.rooms.rooms import get_type_from_room_and_pos
@@ -88,16 +88,105 @@ class RoomItemCombinations:
         assert obj_type in OBJ_TYPES
         new_combs = []
         for obj_comb in self.object_combinations:
+            append_this_comb = False
             left_color, middle_color, right_color = obj_comb
             left_type, middle_type, right_type = [get_type_from_room_and_pos(self.room_name, pos) for pos in ["left", "middle", "right"]]
             for obj_type_iter, obj_color in zip([left_type, middle_type, right_type],
                                            [left_color, middle_color, right_color]):
                 if obj_type_iter == obj_type and (obj_color is not None) == should_be_available:
-                    new_combs.append(obj_comb)
+                    append_this_comb = True
+                    break
+            if append_this_comb:
+                new_combs.append(obj_comb)
         check_for_inval_cond(new_combs, len(self.object_combinations))
         self.object_combinations = new_combs
         if DEBUG_MODE:
             return f"{self.room_name=}, {obj_type=}, {should_be_available=}"
+        if apply_for_all_rooms:
+            if USED_LANGUAGE == "german":
+                if should_be_available:
+                    return f"In jedem Raum muss ein Objekt des Typs {obj_type} vorhanden sein."
+                else:
+                    return f"In keinem Raum darf ein Objekt des Typs {obj_type} vorhanden sein."
+            elif USED_LANGUAGE == "english":
+                if should_be_available:
+                    return f"In every single room, there has to be an object of type {obj_type}."
+                else:
+                    return f"In every single room, there has to be no object of type {obj_type}."
+            else:
+                raise NotImplementedError(f"{USED_LANGUAGE=} not defined for this function")
+        else:
+            if USED_LANGUAGE == "german":
+                if should_be_available:
+                    return f"In Raum {self.room_name} muss ein Objekt des Typs {obj_type} vorhanden sein."
+                else:
+                    return f"In Raum {self.room_name} darf kein Objekt des Typs {obj_type} vorhanden sein."
+            elif USED_LANGUAGE == "english":
+                if should_be_available:
+                    return f"In room {self.room_name}, there has to be an object of type {obj_type}."
+                else:
+                    return f"In room {self.room_name}, there has to be no object of type {obj_type}."
+            else:
+                raise NotImplementedError(f"{USED_LANGUAGE=} not defined for this function")
+
+    def filter_if_x_avail_then_y_avail(self, obj_attr1: str, obj_attr2: str, color: str, style: str, obj_type: str, should_be_available: bool, apply_for_all_rooms: bool = False) -> str:
+        assert obj_type in OBJ_TYPES
+        assert style in STYLES
+        assert color in OBJ_COLORS
+        assert obj_attr1 in OBJ_ATTRIBUTES
+        assert obj_attr2 in OBJ_ATTRIBUTES
+
+        new_combs = []
+        for obj_comb in self.object_combinations:
+            append_this_comb = False
+            left_color, middle_color, right_color = obj_comb
+            left_type, middle_type, right_type = [get_type_from_room_and_pos(self.room_name, pos) for pos in ["left", "middle", "right"]]
+            left_style, middle_style, right_style = [get_obj_style(color, obj_type) for color, obj_type in
+                                                     zip([left_color, middle_color, right_color],
+                                                         [left_type, middle_type, right_type])]
+            if obj_attr1 == "color":
+                first_part_fulfilled = color in [left_color, middle_color, right_color]
+            elif obj_attr1 == "obj_type":
+                first_part_fulfilled = obj_type in [left_type, middle_type, right_type]
+            elif obj_attr1 == "style":
+                first_part_fulfilled = style in [left_style, middle_style, right_style]
+            else:
+                raise NotImplementedError(f"{obj_attr1=} not recognized")
+
+            if not first_part_fulfilled:
+                append_this_comb = True
+            else:
+                for obj_type_iter, obj_color_iter, obj_style_iter in zip([left_type, middle_type, right_type],
+                                                                         [left_color, middle_color, right_color],
+                                                                         [left_style, middle_style, right_style]):
+                    if obj_attr2 == "color":
+                        if obj_color_iter == color and should_be_available:
+                            append_this_comb = True
+                            break
+                        elif obj_color_iter == color and not should_be_available:
+                            append_this_comb = False
+                            break
+                    elif obj_attr2 == "style":
+                        if obj_style_iter == style and obj_color_iter is not None and should_be_available:
+                            append_this_comb = True
+                            break
+                        elif obj_style_iter == style and obj_color_iter is not None and not should_be_available:
+                            append_this_comb = False
+                            break
+                    elif obj_attr2 == "obj_type":
+                        if obj_type_iter == type and obj_color_iter is not None and should_be_available:
+                            append_this_comb = True
+                            break
+                        elif obj_type_iter == type and obj_color_iter is not None and not should_be_available:
+                            append_this_comb = False
+                            break
+            if append_this_comb:
+                new_combs.append(obj_comb)
+        check_for_inval_cond(new_combs, len(self.object_combinations))
+        self.object_combinations = new_combs
+        if DEBUG_MODE:
+            return f"{self.room_name=}, {obj_type=}, {should_be_available=}"
+        # ToDo: Ausgabe schreiben und prüfen ob funktioniert!
         if apply_for_all_rooms:
             if USED_LANGUAGE == "german":
                 if should_be_available:
@@ -139,13 +228,17 @@ class RoomItemCombinations:
 
 def get_random_method_room_obj():
     weighted_choices = [1, 1, 2, 2, 0, 3]
+    obj_attr1 = random.choice(OBJ_ATTRIBUTES)
+    obj_attr2 = random.choice(list(set(OBJ_ATTRIBUTES) - {obj_attr1}))
     params = {
         'nr_items': random.choice(weighted_choices),
         'color': random.choice(OBJ_COLORS),
         'mode': random.choice(["min", "max"]),
         'style': random.choice(STYLES),
         'obj_type': random.choice(OBJ_TYPES),
-        'should_be_available': random.choice([True, False])
+        'should_be_available': random.choice([True, False]),
+        'obj_attr1': obj_attr1,
+        'obj_attr2': obj_attr2,
     }
     methods = [
         RoomItemCombinations.filter_items_by_color_and_quantity,

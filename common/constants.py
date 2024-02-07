@@ -4,6 +4,7 @@ AVAILABLE_ROOMS = ["bedroom1", "bedroom2", "livingroom", "kitchen"]
 POSITIONS = ["left", "middle", "right"]
 OBJ_TYPES = ["curiosity", "painting", "lamp"]
 STYLES = ["modern", "antique", "retro", "rare"]
+OBJ_ATTRIBUTES = ["color", "obj_type", "style"]
 
 ALLOWED_CURIOSITIES = [
     ("curiosity", "green", "modern"),
