@@ -249,9 +249,9 @@ def get_random_method_room_obj():
     }
     methods = [
         RoomItemCombinations.filter_items_by_color_and_quantity,
-        RoomItemCombinations.filter_items_by_style_and_quantity,
         RoomItemCombinations.filter_availability_of_type,
-        RoomItemCombinations.filter_if_x_avail_then_y_avail
+        RoomItemCombinations.filter_if_x_avail_then_y_avail,
+        RoomItemCombinations.filter_if_x_avail_then_y_avail,
     ]
     random_method = random.choice(methods)
     method_args = {param: params[param] for param in params if param in inspect.signature(random_method).parameters}

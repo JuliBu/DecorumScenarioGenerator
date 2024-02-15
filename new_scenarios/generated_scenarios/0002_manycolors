@@ -1,0 +1,28 @@
+All conditions:
+
+Für jeden Raum gilt: Wenn mindestens 1 Objekt von style = rare vorhanden ist, darf kein Objekt von color = red vorhanden sein.
+In keinem Raum darf ein Objekt des Typs curiosity vorhanden sein.
+In Raum livingroom: min 1 Objekte haben die Farbe der Wand.
+Upper floor, nr_elem_in_room=1, color='blue', mode='min'
+Upper floor, nr_elem_in_room=1, color='blue', mode='max'
+Upper floor, nr_elem_in_room=1, color='red', mode='max'
+Upper floor, nr_elem_in_room=2, color='yellow', mode='min'
+Upper floor, nr_elem_in_room=1, color='green', mode='min'
+Players cond, player=2, nr_items=1, color='yellow', mode='max'
+Players cond, player=3, nr_items=2, color='blue', mode='min'
+Players cond, player=2, nr_items=2, color='green', mode='min'
+House cond, nr_elems_in_house=2, color='blue', mode='max'
+House cond, nr_elems_in_house=3, color='green', mode='max'
+Number of conditions: 13
+possible solutions: 672
+
+One possible solution:
+
+((None, 'green', 'yellow'), 'green')
+(('blue', 'yellow', None), 'blue')
+((None, 'red', 'red'), 'red')
+(('red', 'red', None), 'red')
+{1, 2}
+{3, 4}
+
+Process finished with exit code 0

@@ -67,7 +67,7 @@ class UpperFloorCombinationsWithPlayers:
             'style': random.choice(STYLES),
             'obj_type': random.choice(OBJ_TYPES),
             'should_be_available': random.choice([True, False]),
-            'player': random.randint(1,4)
+            'player': random.randint(1, 4)
         }
         methods = [
             self.player_color_elem_in_room,
