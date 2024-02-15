@@ -2,6 +2,7 @@ import inspect
 import itertools
 import random
 
+from combinations.utils import get_attr_value
 from common.constants import OBJ_COLORS, POSITIONS, STYLES, OBJ_TYPES, OBJ_ATTRIBUTES
 from common.utils import check_for_inval_cond
 from house.objects import get_obj_style
@@ -174,10 +175,10 @@ class RoomItemCombinations:
                             append_this_comb = False
                             break
                     elif obj_attr2 == "obj_type":
-                        if obj_type_iter == type and obj_color_iter is not None and should_be_available:
+                        if obj_type_iter == obj_type and obj_color_iter is not None and should_be_available:
                             append_this_comb = True
                             break
-                        elif obj_type_iter == type and obj_color_iter is not None and not should_be_available:
+                        elif obj_type_iter == obj_type and obj_color_iter is not None and not should_be_available:
                             append_this_comb = False
                             break
             if append_this_comb:
@@ -185,32 +186,38 @@ class RoomItemCombinations:
         check_for_inval_cond(new_combs, len(self.object_combinations))
         self.object_combinations = new_combs
         if DEBUG_MODE:
-            return f"{self.room_name=}, {obj_type=}, {should_be_available=}"
-        # ToDo: Ausgabe schreiben und prüfen ob funktioniert!
+            return f"{obj_attr1=}, {obj_attr2=}, {self.room_name=}, {color=}, {style=}  {obj_type=}, {should_be_available=}"
+        attr_value_1 = get_attr_value(obj_attr1, style, obj_type, color)
+        attr_value_2 = get_attr_value(obj_attr2, style, obj_type, color)
+
         if apply_for_all_rooms:
             if USED_LANGUAGE == "german":
                 if should_be_available:
-                    return f"In jedem Raum muss ein Objekt des Typs {obj_type} vorhanden sein."
+                    return f"Für jeden Raum gilt: Wenn mindestens 1 Objekt von {obj_attr1} = {attr_value_1} vorhanden ist," \
+                           f" muss auch ein Objekt von {obj_attr2} = {attr_value_2} vorhanden sein."
                 else:
-                    return f"In keinem Raum darf ein Objekt des Typs {obj_type} vorhanden sein."
+                    return f"Für jeden Raum gilt: Wenn mindestens 1 Objekt von {obj_attr1} = {attr_value_1} vorhanden ist," \
+                           f" darf kein Objekt von {obj_attr2} = {attr_value_2} vorhanden sein."
             elif USED_LANGUAGE == "english":
                 if should_be_available:
-                    return f"In every single room, there has to be an object of type {obj_type}."
+                    raise NotImplementedError
                 else:
-                    return f"In every single room, there has to be no object of type {obj_type}."
+                    raise NotImplementedError
             else:
                 raise NotImplementedError(f"{USED_LANGUAGE=} not defined for this function")
         else:
             if USED_LANGUAGE == "german":
                 if should_be_available:
-                    return f"In Raum {self.room_name} muss ein Objekt des Typs {obj_type} vorhanden sein."
+                    return f"Für Raum {self.room_name} gilt: Wenn mindestens 1 Objekt von {obj_attr1} = {attr_value_1} vorhanden ist," \
+                           f" muss auch ein Objekt von {obj_attr2} = {attr_value_2} vorhanden sein."
                 else:
-                    return f"In Raum {self.room_name} darf kein Objekt des Typs {obj_type} vorhanden sein."
+                    return f"Für Raum {self.room_name} gilt: Wenn mindestens 1 Objekt von {obj_attr1} = {attr_value_1} vorhanden ist," \
+                           f" darf kein Objekt von {obj_attr2} = {attr_value_2} vorhanden sein."
             elif USED_LANGUAGE == "english":
                 if should_be_available:
-                    return f"In room {self.room_name}, there has to be an object of type {obj_type}."
+                    raise NotImplementedError
                 else:
-                    return f"In room {self.room_name}, there has to be no object of type {obj_type}."
+                    raise NotImplementedError
             else:
                 raise NotImplementedError(f"{USED_LANGUAGE=} not defined for this function")
 
@@ -243,7 +250,8 @@ def get_random_method_room_obj():
     methods = [
         RoomItemCombinations.filter_items_by_color_and_quantity,
         RoomItemCombinations.filter_items_by_style_and_quantity,
-        RoomItemCombinations.filter_availability_of_type
+        RoomItemCombinations.filter_availability_of_type,
+        RoomItemCombinations.filter_if_x_avail_then_y_avail
     ]
     random_method = random.choice(methods)
     method_args = {param: params[param] for param in params if param in inspect.signature(random_method).parameters}
