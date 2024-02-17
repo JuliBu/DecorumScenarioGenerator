@@ -5,6 +5,7 @@ import random
 from combinations.utils import get_all_rooms_and_players_from_single_house_comb
 from common.constants import OBJ_COLORS, STYLES, OBJ_TYPES
 from common.utils import check_for_inval_cond
+from house.rooms.rooms import get_room_from_color_and_name
 
 
 class HouseCombinations:
@@ -34,6 +35,18 @@ class HouseCombinations:
         check_for_inval_cond(new_combs, len(self.house_combs))
         self.house_combs = new_combs
         return f"House cond, {nr_elems_in_house=}, {color=}, {mode=}"
+
+    def new_generic_function(self):
+        # asserts
+        new_combs = []
+        for house_comb in self.house_combs:
+            bedroom1_colors, bedroom2_colors, players_left, players_right, livingroom_colors, kitchen_colors = get_all_rooms_and_players_from_single_house_comb(
+                house_comb)
+            bedroom1 = get_room_from_color_and_name("bedroom1", bedroom1_colors)
+            bedroom2 = get_room_from_color_and_name("bedroom2", bedroom2_colors)
+            livingroom = get_room_from_color_and_name("livingroom", livingroom_colors)
+            kitchen = get_room_from_color_and_name("kitchen", kitchen_colors)
+            # some functions
 
     def get_random_method(self):
         weighted_choices = [

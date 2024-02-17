@@ -1,9 +1,9 @@
 import itertools
 from copy import deepcopy
-from typing import Optional, List, Union
+from typing import Optional, List, Union, Tuple
 
 from common.constants import AVAILABLE_ROOMS, OBJ_COLORS, POSITIONS, STYLES
-from house.objects import DecorumObject
+from house.objects import DecorumObject, get_obj_style
 from common.utils import check_for_inval_cond
 
 
@@ -19,7 +19,6 @@ class Room:
         self.left_object = left_object
         self.middle_object = middle_object
         self.right_object = right_object
-        self.players = []
 
     def set_wall_color(self, new_color: str):
         assert new_color in OBJ_COLORS
@@ -67,10 +66,6 @@ class Room:
                     output_objects.append(cur_obj)
         return output_objects
 
-    def add_player(self, player):
-        assert len(self.players) < 2
-        self.players.append(player)
-
     def get_nr_color_elements(self, color: str) -> int:
         assert color in OBJ_COLORS
         counter = 0
@@ -89,11 +84,9 @@ class Room:
 
     # Functions to modify room_combinations
 
-
     def __str__(self):
-        player_str = ', '.join(str(player) for player in self.players)
         return f"{self.name} (Wall Color: {self.wall_color})," \
-               f"Objects: {str(self.left_object)=}, {str(self.middle_object)=}, {str(self.right_object)=}, Players: {player_str}"
+               f"Objects: {str(self.left_object)=}, {str(self.middle_object)=}, {str(self.right_object)=}"
 
 
 def get_type_from_room_and_pos(room_name: str, pos: str) -> str:
@@ -164,3 +157,13 @@ def get_position_of_object_from_room_and_type(room_name: str, d_obj_type: str) -
         elif d_obj_type == "curiosity":
             return "right"
     raise ValueError(f"Could not get position for { room_name=}, {d_obj_type=}.")
+
+def get_room_from_color_and_name(room_name: str, color_comb: Tuple[Tuple[str, str, str], str]) -> Room:
+    obj_colors, wall_color = color_comb
+    left_color, middle_color, right_color = obj_colors
+    left_type, middle_type, right_type = get_type_from_room_and_pos(room_name, "left"), get_type_from_room_and_pos(room_name, "middle"), get_type_from_room_and_pos(room_name, "right")
+    left_style, middle_style, right_style = get_obj_style(left_color, left_type), get_obj_style(middle_color, middle_type), get_obj_style(right_color, right_type)
+    left_obj = DecorumObject(left_type, left_color, left_style) if left_color is not None else None
+    middle_obj = DecorumObject(middle_type, middle_color, middle_style) if middle_color is not None else None
+    right_obj = DecorumObject(right_type, right_color, right_style) if right_color is not None else None
+    return Room(room_name, wall_color, left_obj, middle_obj, right_obj)

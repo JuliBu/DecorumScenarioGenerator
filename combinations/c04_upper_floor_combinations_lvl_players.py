@@ -5,6 +5,7 @@ import random
 from combinations.utils import get_rooms_and_players_from_single_upper_floor_combination_with_players
 from common.constants import OBJ_COLORS, STYLES, OBJ_TYPES
 from common.utils import check_for_inval_cond
+from house.rooms.rooms import get_room_from_color_and_name
 
 
 class UpperFloorCombinationsWithPlayers:
@@ -49,6 +50,16 @@ class UpperFloorCombinationsWithPlayers:
         check_for_inval_cond(new_combs, len(self.upper_floor_combinations_with_players))
         self.upper_floor_combinations_with_players = new_combs
         return f"Players cond, {player=}, {nr_items=}, {color=}, {mode=}"
+
+    def new_generic_function(self):
+        # asserts
+        new_combs = []
+        for upper_floor_comb in self.upper_floor_combinations_with_players:
+            bedroom1_colors, bedroom2_colors, players_left, players_right = get_rooms_and_players_from_single_upper_floor_combination_with_players(
+                upper_floor_comb)
+            bedroom1 = get_room_from_color_and_name("bedroom1", bedroom1_colors)
+            bedroom2 = get_room_from_color_and_name("bedroom2", bedroom2_colors)
+            # some functions
 
     def get_random_method(self):
         weighted_choices = [

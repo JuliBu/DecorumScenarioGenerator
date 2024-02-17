@@ -4,6 +4,7 @@ import random
 
 from common.constants import OBJ_COLORS, STYLES, OBJ_TYPES
 from common.utils import check_for_inval_cond
+from house.rooms.rooms import get_room_from_color_and_name
 
 
 class UpperFloorCombinationsOnlyRooms:
@@ -30,6 +31,19 @@ class UpperFloorCombinationsOnlyRooms:
         self.upper_floor_combinations_only_rooms = new_combs
         return f"Upper floor, {nr_elem_in_room=}, {color=}, {mode=}"
 
+
+    def new_generic_function(self):
+        # Asserts
+        new_combs = []
+        for upper_floor in self.upper_floor_combinations_only_rooms:
+            left_room_colors, right_room_colors = upper_floor
+            bedroom1 = get_room_from_color_and_name("bedroom1", left_room_colors)
+            bedroom2 = get_room_from_color_and_name("bedroom2", right_room_colors)
+            # some functions
+
+
+
+
     def get_random_method(self):
         weighted_choices_items_on_floor = [
             0,
@@ -48,7 +62,7 @@ class UpperFloorCombinationsOnlyRooms:
             4
         ]
         params = {
-            'nr_items': random.choice(weighted_choices_items_on_floor),
+            'nr_elems': random.choice(weighted_choices_items_on_floor),
             'nr_elem_in_room': random.choice(weighted_choices_elems_in_room),
             'color': random.choice(OBJ_COLORS),
             'mode': random.choice(["min", "max"]),
