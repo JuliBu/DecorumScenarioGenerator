@@ -50,6 +50,21 @@ class UpperFloorCombinationsWithPlayers:
         check_for_inval_cond(new_combs, len(self.upper_floor_combinations_with_players))
         self.upper_floor_combinations_with_players = new_combs
         return f"Players cond, {player=}, {nr_items=}, {color=}, {mode=}"
+        #ToDo: Write output
+
+    def player_a_avoids_player_b(self, player: int, player_b: int):
+        assert player in [1, 2, 3, 4]
+        assert player_b in [1, 2, 3, 4]
+        assert player != player_b
+
+        new_combs = []
+        for upper_floor_comb in self.upper_floor_combinations_with_players:
+            bedroom1_colors, bedroom2_colors, players_left, players_right = get_rooms_and_players_from_single_upper_floor_combination_with_players(
+                upper_floor_comb)
+            if (player in players_left and player_b not in players_left) or (player in players_right and player_b not in players_right):
+                new_combs.append(upper_floor_comb)
+        # ToDo: Write output
+
 
     def new_generic_function(self):
         # asserts
@@ -71,6 +86,8 @@ class UpperFloorCombinationsWithPlayers:
             5, 5,
             6
             ]
+        player_a = random.choice([1, 2, 3, 4])
+        player_b = list({1, 2, 3, 4} - {player_a})
         params = {
             'nr_items': random.choice(weighted_choices),
             'color': random.choice(OBJ_COLORS),
@@ -78,7 +95,8 @@ class UpperFloorCombinationsWithPlayers:
             'style': random.choice(STYLES),
             'obj_type': random.choice(OBJ_TYPES),
             'should_be_available': random.choice([True, False]),
-            'player': random.randint(1, 4)
+            'player': player_a,
+            'player_b': player_b
         }
         methods = [
             self.player_color_elem_in_room,
