@@ -6,6 +6,7 @@ from combinations.utils import get_rooms_and_players_from_single_upper_floor_com
 from common.constants import OBJ_COLORS, STYLES, OBJ_TYPES
 from common.utils import check_for_inval_cond
 from house.rooms.rooms import get_room_from_color_and_name
+from new_scenarios.config import DEBUG_MODE, USED_LANGUAGE
 
 
 class UpperFloorCombinationsWithPlayers:
@@ -63,7 +64,14 @@ class UpperFloorCombinationsWithPlayers:
                 upper_floor_comb)
             if (player in players_left and player_b not in players_left) or (player in players_right and player_b not in players_right):
                 new_combs.append(upper_floor_comb)
-        # ToDo: Write output
+        if DEBUG_MODE:
+            if USED_LANGUAGE == "german":
+                return f"Du teilst dir kein Zimmer mit Spieler {player_b}."
+            elif USED_LANGUAGE == "english":
+                return f"You do not share a room with Player {player_b}."
+            else:
+                # ToDo: Write output
+                raise NotImplementedError
 
 
     def new_generic_function(self):
@@ -98,9 +106,19 @@ class UpperFloorCombinationsWithPlayers:
             'player': player_a,
             'player_b': player_b
         }
-        methods = [
-            self.player_color_elem_in_room,
+        methods_with_weights = [
+            (self.player_color_elem_in_room, 15),
+            (self.player_a_avoids_player_b, 1),
         ]
-        random_method = random.choice(methods)
+        total_weight = sum(weight for method, weight in methods_with_weights)
+        random_number = random.uniform(0, total_weight)
+        cumulative_weight = 0
+
+        for method, weight in methods_with_weights:
+            cumulative_weight += weight
+            if random_number < cumulative_weight:
+                random_method = method
+                break
+
         method_args = {param: params[param] for param in params if param in inspect.signature(random_method).parameters}
         return random_method(**method_args)
