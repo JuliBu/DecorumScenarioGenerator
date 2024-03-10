@@ -8,6 +8,7 @@ from combinations.c03_upper_floor_combinations_lvl_rooms import UpperFloorCombin
 from combinations.c04_upper_floor_combinations_lvl_players import UpperFloorCombinationsWithPlayers
 from combinations.c05_house_lvl import HouseCombinations
 from combinations.utils import get_all_rooms_and_players_from_single_house_comb
+from common.conditions import split_conds_to_4_players
 from common.constants import MAX_RETRIES
 from house.rooms.rooms import Room
 from new_scenarios.config import MAX_ROOM_OBJ_COMBINATIONS, MAX_ROOM_WALL_COMBINATIONS, \
@@ -131,7 +132,6 @@ def iter_modifications():
             print(len(upper_floor_player_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs))
 
         except ValueError as e:
-            # print(f"{e}")
             pass
 
     # Creating house conditions
@@ -147,13 +147,17 @@ def iter_modifications():
             print(len(house_combs))
 
         except ValueError as e:
-            # print(f"{e}")
             pass
-
 
     print("\n\nAll conditions:\n")
     for cond in all_conds:
         print(cond)
+
+    player_1_conds, player_2_conds, player_3_conds, player_4_conds = split_conds_to_4_players(all_conds)
+    for idx, player_conds in enumerate([player_1_conds, player_2_conds, player_3_conds, player_4_conds]):
+        print(f"\nPlayer {idx+1}:")
+        for cond in player_conds:
+            print(cond)
 
     print(f"Number of conditions: {len(all_conds)}")
     print(f"possible solutions: {len(house_combs)}")
