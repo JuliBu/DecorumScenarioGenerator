@@ -9,12 +9,16 @@ def check_for_inval_cond(new_combs: List, old_len: int):
 
 
 def most_common_string(list_of_str: List[str], str_to_check: str) -> bool:
+    if len(list_of_str) == 0:
+        return False
     string_counts = Counter(list_of_str)
     most_common, count = string_counts.most_common(1)[0]
     return most_common == str_to_check
 
 
 def least_common_string(list_of_str: List[str], str_to_check: str) -> bool:
+    if len(list_of_str) == 0:
+        return False
     string_counts = Counter(list_of_str)
     least_common, count = string_counts.most_common()[-1]
     return least_common == str_to_check

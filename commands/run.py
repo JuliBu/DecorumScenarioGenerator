@@ -1,6 +1,8 @@
 import random
 from copy import deepcopy
 
+from tqdm import tqdm
+
 from combinations.c01_room_combinations_lvl_obj import RoomItemCombinations, get_random_method_room_obj
 from combinations.c02_room_combinations_lvl_wall import RoomCombinationsWithWalls, \
     get_random_method_room_with_wall
@@ -13,7 +15,7 @@ from common.constants import MAX_RETRIES
 from house.rooms.rooms import Room
 from new_scenarios.config import MAX_ROOM_OBJ_COMBINATIONS, MAX_ROOM_WALL_COMBINATIONS, \
     MAX_UPPER_FLOOR_ROOM_COMBINATIONS, MAX_UPPER_FLOOR_PLAYER_COMBINATIONS, MAX_HOUSE_COMBINATIONS, \
-    CHANCE_OF_ALL_ROOM_WALL_COND, CHANCE_OF_ALL_ROOM_OBJ_COND, SET_SEED
+    CHANCE_OF_ALL_ROOM_WALL_COND, CHANCE_OF_ALL_ROOM_OBJ_COND, SET_SEED, SHOW_PRINTS
 from ui.pdf_gen import gen_pdf_version
 
 random.seed(SET_SEED)
@@ -56,13 +58,15 @@ def iter_modifications(gen_id: int):
             else:
                 current_room = random.choice(rooms_combs)
                 current_cond = rnd_method(current_room, **method_args)
-            print(current_cond)
+            if SHOW_PRINTS:
+                print(current_cond)
             all_conds.append(current_cond)
             room_combs_counter = 1
             for room in rooms_combs:
                 room_combs_counter *= len(room.object_combinations)
             nr_room_combs = room_combs_counter
-            print(nr_room_combs)
+            if SHOW_PRINTS:
+                print(nr_room_combs)
         except ValueError as e:
             # print(f"{e}")
             pass
@@ -95,9 +99,10 @@ def iter_modifications(gen_id: int):
             else:
                 current_room = random.choice(wall_comb_rooms)
                 current_cond = rnd_method(current_room, **method_args)
-            print(current_cond)
             all_conds.append(current_cond)
-            print(len(bedroom1_wall_combs) * len(bedroom2_wall_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs))
+            if SHOW_PRINTS:
+                print(current_cond)
+                print(len(bedroom1_wall_combs) * len(bedroom2_wall_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs))
         except ValueError as e:
             # print(f"{e}")
             pass
@@ -110,10 +115,11 @@ def iter_modifications(gen_id: int):
         iterations += 1
         try:
             current_cond = upper_floor_combs.get_random_method()
-            print(current_cond)
             all_conds.append(current_cond)
-            print(len(upper_floor_combs))
-            print(len(upper_floor_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs))
+            if SHOW_PRINTS:
+                print(current_cond)
+                print(len(upper_floor_combs))
+                print(len(upper_floor_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs))
 
         except ValueError as e:
             # print(f"{e}")
@@ -127,10 +133,11 @@ def iter_modifications(gen_id: int):
         iterations += 1
         try:
             current_cond = upper_floor_player_combs.get_random_method()
-            print(current_cond)
             all_conds.append(current_cond)
-            print(len(upper_floor_player_combs))
-            print(len(upper_floor_player_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs))
+            if SHOW_PRINTS:
+                print(current_cond)
+                print(len(upper_floor_player_combs))
+                print(len(upper_floor_player_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs))
 
         except ValueError as e:
             pass
@@ -143,37 +150,42 @@ def iter_modifications(gen_id: int):
         iterations += 1
         try:
             current_cond = house_combs.get_random_method()
-            print(current_cond)
             all_conds.append(current_cond)
-            print(len(house_combs))
+            if SHOW_PRINTS:
+                print(current_cond)
+                print(len(house_combs))
 
         except ValueError as e:
             pass
 
-    print("\n\nAll conditions:\n")
-    for cond in all_conds:
-        print(cond)
-
-    if len(all_conds) == 12:
-        gen_pdf_version(all_conds, "../new_scenarios/pdfs/tmp_out.pdf", str(gen_id))
-    player_1_conds, player_2_conds, player_3_conds, player_4_conds = split_conds_to_4_players(all_conds)
-    for idx, player_conds in enumerate([player_1_conds, player_2_conds, player_3_conds, player_4_conds]):
-        print(f"\nPlayer {idx+1}:")
-        for cond in player_conds:
+    if SHOW_PRINTS:
+        print("\n\nAll conditions:\n")
+        for cond in all_conds:
             print(cond)
 
-    print(f"Number of conditions: {len(all_conds)}")
-    print(f"possible solutions: {len(house_combs)}")
-    print("\nOne possible solution:\n")
-    out_bedroom1, out_bedroom2, players_left, players_right, livingroom, kitchen = get_all_rooms_and_players_from_single_house_comb(house_combs.house_combs[0])
-    for room in [out_bedroom1, out_bedroom2, livingroom, kitchen]:
-        print(room)
-    for players in [players_left, players_right]:
-        print(players)
+    print(f"\n{len(all_conds)}")
+    if len(all_conds) == 12:
+        gen_pdf_version(all_conds, f"../new_scenarios/pdfs/{str(SET_SEED)}_{str(gen_id)}.pdf", str(gen_id))
+    player_1_conds, player_2_conds, player_3_conds, player_4_conds = split_conds_to_4_players(all_conds)
+    for idx, player_conds in enumerate([player_1_conds, player_2_conds, player_3_conds, player_4_conds]):
+        if SHOW_PRINTS:
+            print(f"\nPlayer {idx+1}:")
+            for cond in player_conds:
+                print(cond)
+
+    if SHOW_PRINTS:
+        print(f"Number of conditions: {len(all_conds)}")
+        print(f"possible solutions: {len(house_combs)}")
+        print("\nOne possible solution:\n")
+        out_bedroom1, out_bedroom2, players_left, players_right, livingroom, kitchen = get_all_rooms_and_players_from_single_house_comb(house_combs.house_combs[0])
+        for room in [out_bedroom1, out_bedroom2, livingroom, kitchen]:
+            print(room)
+        for players in [players_left, players_right]:
+            print(players)
 
 
 if __name__ == '__main__':
-    for idx in range(100):
+    for idx in tqdm(range(1000)):
         try:
             iter_modifications(idx)
         except TimeoutError:
