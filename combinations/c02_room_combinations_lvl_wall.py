@@ -42,8 +42,6 @@ class RoomCombinationsWithWalls:
 
         check_for_inval_cond(new_combs, len(self.room_wall_combinations))
         self.room_wall_combinations = new_combs
-        # if DEBUG_MODE:
-        #     return f"wall_color_cond: {self.room_name=}, {nr_items=}, {mode=}"
         if apply_for_all_rooms:
             ger_output = f"In jedem Raum: {mode} {nr_items} Objekte haben die Farbe der Wand."
             eng_output = f"In every room: {mode} {nr_items} objects have the color of the wall."
@@ -52,6 +50,7 @@ class RoomCombinationsWithWalls:
             eng_output = f"In room {self.room_name}: {mode} {nr_items} objects have the color of the wall."
 
         return ConditionOutput(eng_output, ger_output)
+
 
 def get_random_method_room_with_wall():
     weighted_choices = [1, 1, 2, 2, 0, 3]

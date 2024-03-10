@@ -25,13 +25,10 @@ class UpperFloorCombinationsWithPlayers:
     def __len__(self):
         return len(self.upper_floor_combinations_with_players)
 
-    def player_color_elem_in_room(self, player: int, nr_items_0_to_3: int, color: str, mode: str) -> ConditionOutput:
-        assert 0 <= nr_items_0_to_3 <= 3
+    def player_color_elem_in_room(self, player: int, nr_elems_0_to_4: int, color: str, mode: str) -> ConditionOutput:
+        assert 0 <= nr_elems_0_to_4 <= 4
         assert color in OBJ_COLORS
         assert mode in ["min", "max"]
-
-        if (mode == "min" and nr_items_0_to_3 < 1) or (mode == "max" and nr_items_0_to_3 > 2):
-            raise ValueError
 
         new_combs = []
         for upper_floor_comb in self.upper_floor_combinations_with_players:
@@ -48,19 +45,19 @@ class UpperFloorCombinationsWithPlayers:
             else:
                 raise KeyError(f"{player=} not in any room!")
 
-            if mode == "min" and color_counter >= nr_items_0_to_3:
+            if mode == "min" and color_counter >= nr_elems_0_to_4:
                 new_combs.append(upper_floor_comb)
-            elif mode == "max" and color_counter <= nr_items_0_to_3:
+            elif mode == "max" and color_counter <= nr_elems_0_to_4:
                 new_combs.append(upper_floor_comb)
         check_for_inval_cond(new_combs, len(self.upper_floor_combinations_with_players))
         self.upper_floor_combinations_with_players = new_combs
 
         if mode == "min":
-            ger_output = f"In deinem Zimmern müssen mindestens {nr_items_0_to_3} Objekte der Farbe {color} angehören!"
-            eng_output = f"In your rooms, there must be at least {nr_items_0_to_3} objects belonging to the color {color}!"
+            ger_output = f"In deinem Zimmern müssen mindestens {nr_elems_0_to_4} Elemente der Farbe {color} angehören!"
+            eng_output = f"In your rooms, there must be at least {nr_elems_0_to_4} elements belonging to the color {color}!"
         elif mode == "max":
-            ger_output = f"In deinem Zimmern dürfen höchstens {nr_items_0_to_3} Objekte der Farbe {color} angehören!"
-            eng_output = f"In your rooms, there may be at most {nr_items_0_to_3} objects belonging to the color {color}!"
+            ger_output = f"In deinem Zimmern dürfen höchstens {nr_elems_0_to_4} Elemente der Farbe {color} angehören!"
+            eng_output = f"In your rooms, there may be at most {nr_elems_0_to_4} elements belonging to the color {color}!"
         else:
             raise ValueError
         return ConditionOutput(eng_output, ger_output, player)
@@ -108,11 +105,19 @@ class UpperFloorCombinationsWithPlayers:
             2, 2,
             3
             ]
+        weighted_choices_0_to_4 = [
+            0,
+            1, 1,
+            2, 2, 2,
+            3, 3,
+            4
+            ]
         player_a = random.choice([1, 2, 3, 4])
         player_b = random.choice(list({1, 2, 3, 4} - {player_a}))
         params = {
             'nr_items_0_to_6': random.choice(weighted_choices_0_to_6),
             'nr_items_0_to_3': random.choice(weighted_choices_0_to_3),
+            'nr_elems_0_to_4': random.choice(weighted_choices_0_to_4),
             'color': random.choice(OBJ_COLORS),
             'mode': random.choice(["min", "max"]),
             'style': random.choice(STYLES),

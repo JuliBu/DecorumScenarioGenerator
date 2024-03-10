@@ -209,12 +209,13 @@ class RoomItemCombinations:
 
 def get_random_method_room_obj():
     weighted_choices = [1, 1, 2, 2, 0, 3]
+    weighted_min_max = ["min", "max", "max"]
     obj_attr1 = random.choice(OBJ_ATTRIBUTES)
     obj_attr2 = random.choice(list(set(OBJ_ATTRIBUTES) - {obj_attr1}))
     params = {
         'nr_items': random.choice(weighted_choices),
         'color': random.choice(OBJ_COLORS),
-        'mode': random.choice(["min", "max"]),
+        'mode': random.choice(weighted_min_max),
         'style': random.choice(STYLES),
         'obj_type': random.choice(OBJ_TYPES),
         'should_be_available': random.choice([True, False]),
