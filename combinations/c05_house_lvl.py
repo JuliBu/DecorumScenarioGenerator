@@ -16,9 +16,9 @@ class HouseCombinations:
     def __len__(self):
         return len(self.house_combs)
 
-    def house_color_elems(self, nr_elems_in_house: int, color: str, mode: str):
+    def house_color_elems(self, nr_elems_in_house: int, cond_color: str, mode: str):
         assert 0 <= nr_elems_in_house <= 16
-        assert color in OBJ_COLORS
+        assert cond_color in OBJ_COLORS
         assert mode in ["min", "max"]
 
         new_combs = []
@@ -26,8 +26,8 @@ class HouseCombinations:
             bedroom1, bedroom2, players_left, players_right, livingroom, kitchen = get_all_rooms_and_players_from_single_house_comb(house_comb)
             color_counter = 0
             for room in [bedroom1, bedroom2, livingroom, kitchen]:
-                color_counter += room[0].count(color)
-                if room[1] == color:
+                color_counter += room[0].count(cond_color)
+                if room[1] == cond_color:
                     color_counter += 1
             if mode == "min" and color_counter >= nr_elems_in_house:
                 new_combs.append(house_comb)
@@ -36,11 +36,11 @@ class HouseCombinations:
         check_for_inval_cond(new_combs, len(self.house_combs))
         self.house_combs = new_combs
         if mode == "min":
-            ger_output = f"Im Haus müssen mindestens {nr_elems_in_house} die Farbe {color} haben."
-            eng_output = f"In the house, at least {nr_elems_in_house} must have the color {color}."
+            ger_output = f"Im Haus müssen mindestens {nr_elems_in_house} Elemente die Farbe {cond_color} haben."
+            eng_output = f"In the house, at least {nr_elems_in_house} elements must have the color {cond_color}."
         elif mode == "max":
-            ger_output = f"Im Haus dürfen maximal {nr_elems_in_house} die Farbe {color} haben."
-            eng_output = f"In the house, at most {nr_elems_in_house} can have the color {color}."
+            ger_output = f"Im Haus dürfen maximal {nr_elems_in_house} Elemente die Farbe {cond_color} haben."
+            eng_output = f"In the house, at most {nr_elems_in_house} elements can have the color {cond_color}."
         else:
             raise ValueError
         return ConditionOutput(eng_output, ger_output)
@@ -69,6 +69,8 @@ class HouseCombinations:
                     house_objects.append(single_obj)
             objs_attr = []
             for house_obj in house_objects:
+                if house_obj is None:
+                    continue
                 if attr == "color":
                     objs_attr.append(house_obj.color)
                 elif attr == "obj_type":
@@ -130,13 +132,14 @@ class HouseCombinations:
         params = {
             'nr_items': random.choice(weighted_choices),
             'nr_elems_in_house': random.randint(0, 16),
-            'color': random.choice(OBJ_COLORS),
+            'cond_color': random.choice(OBJ_COLORS),
             'mode': random.choice(["min", "max"]),
-            'style': random.choice(STYLES),
-            'obj_type': random.choice(OBJ_TYPES),
+            'cond_style': random.choice(STYLES),
+            'cond_type': random.choice(OBJ_TYPES),
             'should_be_available': random.choice([True, False]),
             'player': random.randint(1, 4),
-            'most_least': random.choice(["most", "least"])
+            'most_least': random.choice(["most", "least"]),
+            'attr': random.choice(OBJ_ATTRIBUTES),
         }
         methods = [
             self.house_color_elems,
