@@ -33,7 +33,8 @@ def iter_modifications():
 
     # Getting conditions on room (object) level
     iterations = 0
-    while (len(bedroom1_combs) * len(bedroom2_combs) * len(livingroom_combs) * len(kitchen_combs) > MAX_ROOM_OBJ_COMBINATIONS):
+    nr_room_combs = len(bedroom1_combs) * len(bedroom2_combs) * len(livingroom_combs) * len(kitchen_combs)
+    while (nr_room_combs > MAX_ROOM_OBJ_COMBINATIONS):
         if iterations > MAX_RETRIES:
             raise TimeoutError("iteration exceeded MAX_RETRIES")
         iterations += 1
@@ -55,7 +56,11 @@ def iter_modifications():
                 current_cond = rnd_method(current_room, **method_args)
             print(current_cond)
             all_conds.append(current_cond)
-            print(len(bedroom1_combs) * len(bedroom2_combs) * len(livingroom_combs) * len(kitchen_combs))
+            room_combs_counter = 1
+            for room in rooms_combs:
+                room_combs_counter *= len(room.object_combinations)
+            nr_room_combs = room_combs_counter
+            print(nr_room_combs)
         except ValueError as e:
             # print(f"{e}")
             pass
