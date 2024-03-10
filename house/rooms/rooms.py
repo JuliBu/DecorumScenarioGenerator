@@ -57,6 +57,10 @@ class Room:
         else:
             return None
 
+    def get_all_objects(self) -> List[DecorumObject]:
+        list_of_objects = [self.left_object, self.middle_object, self.right_object]
+        return list_of_objects
+
     def get_all_obj_by_color(self, color: str) -> List[DecorumObject]:
         output_objects = []
         for pos in POSITIONS:
