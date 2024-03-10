@@ -26,7 +26,7 @@ class RoomCombinationsWithWalls:
 
     def filter_color_and_quantity_wall(self, nr_items: int, mode: str, apply_for_all_rooms: bool = False):
         assert 0 <= nr_items <= 3
-        assert mode in ["min", "max"]
+        assert mode in ["min", "max", "exact"]
 
         new_combs = []
         for obj_comb, wall_color in self.room_wall_combinations:
@@ -34,6 +34,10 @@ class RoomCombinationsWithWalls:
                 new_combs.append((obj_comb, wall_color))
             elif mode == "max" and obj_comb.count(wall_color) <= nr_items:
                 new_combs.append((obj_comb, wall_color))
+            elif mode == "exact" and obj_comb.count(wall_color) == nr_items:
+                new_combs.append((obj_comb, wall_color))
+            else:
+                raise ValueError
 
         check_for_inval_cond(new_combs, len(self.room_wall_combinations))
         self.room_wall_combinations = new_combs
@@ -62,7 +66,7 @@ def get_random_method_room_with_wall():
     params = {
         'nr_items': random.choice(weighted_choices),
         'color': random.choice(OBJ_COLORS),
-        'mode': random.choice(["min", "max"]),
+        'mode': random.choice(["min", "max", "exact"]),
         'style': random.choice(STYLES),
         'obj_type': random.choice(OBJ_TYPES),
         'should_be_available': random.choice([True, False])
