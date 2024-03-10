@@ -4,6 +4,7 @@ import random
 
 from combinations.utils import get_all_rooms_and_players_from_single_house_comb
 from common.constants import OBJ_COLORS, STYLES, OBJ_TYPES, OBJ_ATTRIBUTES
+from common.data_classes import ConditionOutput
 from common.utils import check_for_inval_cond, most_common_string, least_common_string
 from house.rooms.rooms import get_room_from_color_and_name
 
@@ -34,7 +35,16 @@ class HouseCombinations:
                 new_combs.append(house_comb)
         check_for_inval_cond(new_combs, len(self.house_combs))
         self.house_combs = new_combs
-        return f"House cond, {nr_elems_in_house=}, {color=}, {mode=}"
+        if mode == "min":
+            ger_output = f"Im Haus müssen mindestens {nr_elems_in_house} die Farbe {color} haben."
+            eng_output = f"In the house, at least {nr_elems_in_house} must have the color {color}."
+        elif mode == "max":
+            ger_output = f"Im Haus dürfen maximal {nr_elems_in_house} die Farbe {color} haben."
+            eng_output = f"In the house, at most {nr_elems_in_house} can have the color {color}."
+        else:
+            raise ValueError
+        return ConditionOutput(eng_output, ger_output)
+
 
     def house_attr_most_or_least(self, attr: str, most_least: str, cond_style: str, cond_type: str, cond_color: str):
         assert attr in OBJ_ATTRIBUTES
@@ -42,6 +52,8 @@ class HouseCombinations:
         assert cond_color in OBJ_COLORS
         assert cond_style in STYLES
         assert cond_type in OBJ_TYPES
+
+        # ToDo: Check what happens with Nones
 
         new_combs = []
         for house_comb in self.house_combs:
@@ -79,9 +91,19 @@ class HouseCombinations:
 
         check_for_inval_cond(new_combs, len(self.house_combs))
         self.house_combs = new_combs
-        # ToDo: Output
-        return f"House cond, {attr=}, {most_least=}, {cond_style=}, {cond_type=}, {cond_color=}"
 
+        ger_most_or_least = "häufigste" if most_least == "most" else "seltenste"
+        if attr == "color":
+            attr_value = cond_color
+        elif attr == "obj_type":
+            attr_value = cond_type
+        elif attr == "style":
+            attr_value = cond_style
+        else:
+            raise ValueError
+        ger_output = f"Im Haus muss {attr_value} die/der {ger_most_or_least} Objekt-{attr} sein!"
+        eng_output = f"In the house, {attr_value} must be the {most_least} common object-{attr}!"
+        return ConditionOutput(eng_output, ger_output)
 
     def new_generic_function(self):
         # asserts

@@ -73,14 +73,10 @@ class UpperFloorCombinationsWithPlayers:
                 upper_floor_comb)
             if (player in players_left and player_b not in players_left) or (player in players_right and player_b not in players_right):
                 new_combs.append(upper_floor_comb)
-        if DEBUG_MODE:
-            if USED_LANGUAGE == "german":
-                return f"Du teilst dir kein Zimmer mit Spieler {player_b}."
-            elif USED_LANGUAGE == "english":
-                return f"You do not share a room with Player {player_b}."
-            else:
-                # ToDo: Write output
-                raise NotImplementedError
+
+        ger_output = f"Du teilst dir kein Zimmer mit Spieler {player_b}."
+        eng_output = f"You do not share a room with Player {player_b}."
+        return ConditionOutput(eng_output, ger_output, player)
 
 
     def new_generic_function(self):
