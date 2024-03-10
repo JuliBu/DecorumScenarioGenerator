@@ -3,6 +3,7 @@ import itertools
 import random
 
 from common.constants import OBJ_COLORS, STYLES, OBJ_TYPES
+from common.data_classes import ConditionOutput
 from common.utils import check_for_inval_cond
 from new_scenarios.config import DEBUG_MODE, USED_LANGUAGE
 
@@ -24,7 +25,7 @@ class RoomCombinationsWithWalls:
             out_str += f"{wall_color=}\n"
         return out_str
 
-    def filter_color_and_quantity_wall(self, nr_items: int, mode: str, apply_for_all_rooms: bool = False):
+    def filter_color_and_quantity_wall(self, nr_items: int, mode: str, apply_for_all_rooms: bool = False) -> ConditionOutput:
         assert 0 <= nr_items <= 3
         assert mode in ["min", "max", "exact"]
 
@@ -41,25 +42,16 @@ class RoomCombinationsWithWalls:
 
         check_for_inval_cond(new_combs, len(self.room_wall_combinations))
         self.room_wall_combinations = new_combs
-        if DEBUG_MODE:
-            return f"wall_color_cond: {self.room_name=}, {nr_items=}, {mode=}"
+        # if DEBUG_MODE:
+        #     return f"wall_color_cond: {self.room_name=}, {nr_items=}, {mode=}"
         if apply_for_all_rooms:
-            if USED_LANGUAGE == "german":
-                return f"In jedem Raum: {mode} {nr_items} Objekte haben die Farbe der Wand."
-            elif USED_LANGUAGE == "english":
-                return f"In every room: {mode} {nr_items} objects have the color of the wall."
-            else:
-                raise NotImplementedError(f"{USED_LANGUAGE=} not defined for this function")
+            ger_output = f"In jedem Raum: {mode} {nr_items} Objekte haben die Farbe der Wand."
+            eng_output = f"In every room: {mode} {nr_items} objects have the color of the wall."
         else:
-            if USED_LANGUAGE == "german":
-                return f"In Raum {self.room_name}: {mode} {nr_items} Objekte haben die Farbe der Wand."
-            elif USED_LANGUAGE == "english":
-                return f"In room {self.room_name}: {mode} {nr_items} objects have the color of the wall."
-            else:
-                raise NotImplementedError(f"{USED_LANGUAGE=} not defined for this function")
+            ger_output = f"In Raum {self.room_name}: {mode} {nr_items} Objekte haben die Farbe der Wand."
+            eng_output = f"In room {self.room_name}: {mode} {nr_items} objects have the color of the wall."
 
-    # ToDo: ggf Funktion wie Wenn antikes Objekt in diesem Raum enthalten, darf die Wandfarbe nicht blau sein
-
+        return ConditionOutput(eng_output, ger_output)
 
 def get_random_method_room_with_wall():
     weighted_choices = [1, 1, 2, 2, 0, 3]

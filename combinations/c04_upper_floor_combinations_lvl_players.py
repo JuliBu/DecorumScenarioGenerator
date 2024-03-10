@@ -4,6 +4,7 @@ import random
 
 from combinations.utils import get_rooms_and_players_from_single_upper_floor_combination_with_players
 from common.constants import OBJ_COLORS, STYLES, OBJ_TYPES
+from common.data_classes import ConditionOutput
 from common.utils import check_for_inval_cond
 from house.rooms.rooms import get_room_from_color_and_name
 from new_scenarios.config import DEBUG_MODE, USED_LANGUAGE
@@ -24,7 +25,7 @@ class UpperFloorCombinationsWithPlayers:
     def __len__(self):
         return len(self.upper_floor_combinations_with_players)
 
-    def player_color_elem_in_room(self, player: int, nr_items: int, color: str, mode: str):
+    def player_color_elem_in_room(self, player: int, nr_items: int, color: str, mode: str) -> ConditionOutput:
         assert 0 <= nr_items <= 6
         assert color in OBJ_COLORS
         assert mode in ["min", "max"]
@@ -50,8 +51,16 @@ class UpperFloorCombinationsWithPlayers:
                 new_combs.append(upper_floor_comb)
         check_for_inval_cond(new_combs, len(self.upper_floor_combinations_with_players))
         self.upper_floor_combinations_with_players = new_combs
-        return f"Players cond, {player=}, {nr_items=}, {color=}, {mode=}"
-        #ToDo: Write output
+
+        if mode == "min":
+            ger_output = f"In deinem Zimmern müssen mindestens {nr_items} Objekte der Farbe {color} angehören!"
+            eng_output = f"In your rooms, there must be at least {nr_items} objects belonging to the color {color}!"
+        elif mode == "max":
+            ger_output = f"In deinem Zimmern dürfen höchstens {nr_items} Objekte der Farbe {color} angehören!"
+            eng_output = f"In your rooms, there may be at most {nr_items} objects belonging to the color {color}!"
+        else:
+            raise ValueError
+        return ConditionOutput(eng_output, ger_output, player)
 
     def player_a_avoids_player_b(self, player: int, player_b: int):
         assert player in [1, 2, 3, 4]

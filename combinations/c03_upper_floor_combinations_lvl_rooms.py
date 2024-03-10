@@ -3,6 +3,7 @@ import itertools
 import random
 
 from common.constants import OBJ_COLORS, STYLES, OBJ_TYPES
+from common.data_classes import ConditionOutput
 from common.utils import check_for_inval_cond
 from house.rooms.rooms import get_room_from_color_and_name
 
@@ -14,7 +15,7 @@ class UpperFloorCombinationsOnlyRooms:
     def __len__(self):
         return len(self.upper_floor_combinations_only_rooms)
 
-    def filter_floor_items_by_color_and_quantity(self, nr_elem_in_room: int, color: str, mode: str):
+    def filter_floor_items_by_color_and_quantity(self, nr_elem_in_room: int, color: str, mode: str) -> ConditionOutput:
         assert 0 <= nr_elem_in_room <= 4
         assert color in OBJ_COLORS
         assert mode in ["min", "max"]
@@ -29,7 +30,18 @@ class UpperFloorCombinationsOnlyRooms:
                 new_combs.append(upper_floor)
         check_for_inval_cond(new_combs, len(self.upper_floor_combinations_only_rooms))
         self.upper_floor_combinations_only_rooms = new_combs
-        return f"Upper floor, {nr_elem_in_room=}, {color=}, {mode=}"
+        # return f"Upper floor, {nr_elem_in_room=}, {color=}, {mode=}"
+
+        if mode == "min":
+            ger_output = f"In der oberen Etage müssen mindestens {nr_elem_in_room} Objekte in der Farbe {color} zu finden sein!"
+            eng_output = f"In the upper floor, there must be at least {nr_elem_in_room} {color} colored objects!"
+        elif mode == "max":
+            ger_output = f"In der oberen Etage dürfen maximal {nr_elem_in_room} Objekte in der Farbe {color} zu finden sein!"
+            eng_output = f"In the upper floor, there may be a maximum of {nr_elem_in_room} {color} colored objects!"
+        else:
+            raise ValueError
+
+        return ConditionOutput(eng_output, ger_output)
 
 
     def new_generic_function(self):
