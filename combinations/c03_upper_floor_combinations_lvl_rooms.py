@@ -15,8 +15,8 @@ class UpperFloorCombinationsOnlyRooms:
     def __len__(self):
         return len(self.upper_floor_combinations_only_rooms)
 
-    def filter_floor_items_by_color_and_quantity(self, nr_elem_in_room: int, color: str, mode: str) -> ConditionOutput:
-        assert 0 <= nr_elem_in_room <= 4
+    def filter_floor_items_by_color_and_quantity(self, nr_items_on_floor: int, color: str, mode: str) -> ConditionOutput:
+        assert 0 <= nr_items_on_floor <= 6
         assert color in OBJ_COLORS
         assert mode in ["min", "max"]
 
@@ -24,20 +24,20 @@ class UpperFloorCombinationsOnlyRooms:
         for upper_floor in self.upper_floor_combinations_only_rooms:
             left_room, right_room = upper_floor
             color_counter = (left_room[0] + right_room[0]).count(color)
-            if mode == "min" and color_counter >= nr_elem_in_room:
+            if mode == "min" and color_counter >= nr_items_on_floor:
                 new_combs.append(upper_floor)
-            elif mode == "max" and color_counter <= nr_elem_in_room:
+            elif mode == "max" and color_counter <= nr_items_on_floor:
                 new_combs.append(upper_floor)
         check_for_inval_cond(new_combs, len(self.upper_floor_combinations_only_rooms))
         self.upper_floor_combinations_only_rooms = new_combs
         # return f"Upper floor, {nr_elem_in_room=}, {color=}, {mode=}"
 
         if mode == "min":
-            ger_output = f"In der oberen Etage müssen mindestens {nr_elem_in_room} Objekte in der Farbe {color} zu finden sein!"
-            eng_output = f"In the upper floor, there must be at least {nr_elem_in_room} {color} colored objects!"
+            ger_output = f"In der oberen Etage müssen mindestens {nr_items_on_floor} Objekte in der Farbe {color} zu finden sein!"
+            eng_output = f"In the upper floor, there must be at least {nr_items_on_floor} {color} colored objects!"
         elif mode == "max":
-            ger_output = f"In der oberen Etage dürfen maximal {nr_elem_in_room} Objekte in der Farbe {color} zu finden sein!"
-            eng_output = f"In the upper floor, there may be a maximum of {nr_elem_in_room} {color} colored objects!"
+            ger_output = f"In der oberen Etage dürfen maximal {nr_items_on_floor} Objekte in der Farbe {color} zu finden sein!"
+            eng_output = f"In the upper floor, there may be a maximum of {nr_items_on_floor} {color} colored objects!"
         else:
             raise ValueError
 
@@ -74,7 +74,7 @@ class UpperFloorCombinationsOnlyRooms:
             4
         ]
         params = {
-            'nr_elems': random.choice(weighted_choices_items_on_floor),
+            'nr_items_on_floor': random.choice(weighted_choices_items_on_floor),
             'nr_elem_in_room': random.choice(weighted_choices_elems_in_room),
             'color': random.choice(OBJ_COLORS),
             'mode': random.choice(["min", "max"]),
