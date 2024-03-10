@@ -24,7 +24,7 @@ init_livingroom = Room("livingroom", "green")
 init_kitchen = Room("kitchen", "blue")
 
 
-def iter_modifications():
+def iter_modifications(gen_id: int):
     all_conds = []
     # Creating rooms
     bedroom1_combs = RoomItemCombinations('bedroom1')
@@ -154,7 +154,8 @@ def iter_modifications():
     for cond in all_conds:
         print(cond)
 
-    gen_pdf_version(all_conds, "../new_scenarios/pdfs/tmp_out.pdf", "tmp")
+    if len(all_conds) == 12:
+        gen_pdf_version(all_conds, "../new_scenarios/pdfs/tmp_out.pdf", str(gen_id))
     player_1_conds, player_2_conds, player_3_conds, player_4_conds = split_conds_to_4_players(all_conds)
     for idx, player_conds in enumerate([player_1_conds, player_2_conds, player_3_conds, player_4_conds]):
         print(f"\nPlayer {idx+1}:")
@@ -172,4 +173,8 @@ def iter_modifications():
 
 
 if __name__ == '__main__':
-    iter_modifications()
+    for idx in range(100):
+        try:
+            iter_modifications(idx)
+        except TimeoutError:
+            pass
