@@ -172,23 +172,23 @@ class RoomItemCombinations:
 
         if apply_for_all_rooms:
             if should_be_available:
-                ger_output = f"Für jeden Raum gilt: Wenn mindestens 1 Objekt von {obj_attr1} = {attr_value_1} vorhanden ist," \
+                ger_output = f"Für jeden Raum gilt: Wenn mind. 1 Objekt von {obj_attr1} = {attr_value_1} vorhanden ist," \
                            f" muss auch ein Objekt von {obj_attr2} = {attr_value_2} vorhanden sein."
                 eng_output = f"In each room: If at least 1 object has {obj_attr1} = {attr_value_1}," \
                              f" then there must also be an object with {obj_attr2} = {attr_value_2}."
             else:
-                ger_output = f"Für jeden Raum gilt: Wenn mindestens 1 Objekt von {obj_attr1} = {attr_value_1} vorhanden ist," \
+                ger_output = f"Für jeden Raum gilt: Wenn mind. 1 Objekt von {obj_attr1} = {attr_value_1} vorhanden ist," \
                            f" darf kein Objekt von {obj_attr2} = {attr_value_2} vorhanden sein."
                 eng_output = f"For each room, it applies: If at least 1 object has {obj_attr1} = {attr_value_1}," \
                            f" then no object with {obj_attr2} = {attr_value_2} must be present."
         else:
             if should_be_available:
-                ger_output = f"Für Raum {self.room_name} gilt: Wenn mindestens 1 Objekt von {obj_attr1} = {attr_value_1} vorhanden ist," \
+                ger_output = f"Für Raum {self.room_name} gilt: Wenn mind. 1 Objekt von {obj_attr1} = {attr_value_1} vorhanden ist," \
                        f" muss auch ein Objekt von {obj_attr2} = {attr_value_2} vorhanden sein."
                 eng_output = f"For room {self.room_name}, it applies: If at least 1 object has {obj_attr1} = {attr_value_1}," \
                              f" then there must also be an object with {obj_attr2} = {attr_value_2}."
             else:
-                ger_output = f"Für Raum {self.room_name} gilt: Wenn mindestens 1 Objekt von {obj_attr1} = {attr_value_1} vorhanden ist," \
+                ger_output = f"Für Raum {self.room_name} gilt: Wenn mind. 1 Objekt von {obj_attr1} = {attr_value_1} vorhanden ist," \
                        f" darf kein Objekt von {obj_attr2} = {attr_value_2} vorhanden sein."
                 eng_output = f"For room {self.room_name}, it applies: If at least 1 object has {obj_attr1} = {attr_value_1}," \
                              f" then no object with {obj_attr2} = {attr_value_2} must be present."
