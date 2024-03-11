@@ -38,7 +38,7 @@ def iter_modifications(gen_id: int):
     # Getting conditions on room (object) level
     iterations = 0
     nr_room_combs = len(bedroom1_combs) * len(bedroom2_combs) * len(livingroom_combs) * len(kitchen_combs)
-    while (nr_room_combs > MAX_ROOM_OBJ_COMBINATIONS):
+    while ((nr_room_combs > MAX_ROOM_OBJ_COMBINATIONS) and (len(all_conds) < 12)):
         if iterations > MAX_RETRIES:
             raise TimeoutError("iteration exceeded MAX_RETRIES")
         iterations += 1
@@ -79,7 +79,7 @@ def iter_modifications(gen_id: int):
     wall_comb_rooms = [bedroom1_wall_combs, bedroom2_wall_combs, livingroom_wall_combs, kitchen_wall_combs]
 
     # Getting conditions on room (object + wall)
-    while (len(bedroom1_wall_combs) * len(bedroom2_wall_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs) > MAX_ROOM_WALL_COMBINATIONS):
+    while ((len(bedroom1_wall_combs) * len(bedroom2_wall_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs) > MAX_ROOM_WALL_COMBINATIONS) and (len(all_conds) < 12)):
         if iterations > MAX_RETRIES:
             raise TimeoutError("iteration exceeded MAX_RETRIES")
         iterations += 1
@@ -109,7 +109,7 @@ def iter_modifications(gen_id: int):
 
     # Creating conditions for upper floor
     upper_floor_combs = UpperFloorCombinationsOnlyRooms(bedroom1_wall_combs.room_wall_combinations, bedroom2_wall_combs.room_wall_combinations)
-    while (len(upper_floor_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs) > MAX_UPPER_FLOOR_ROOM_COMBINATIONS):
+    while ((len(upper_floor_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs) > MAX_UPPER_FLOOR_ROOM_COMBINATIONS) and (len(all_conds) < 12)):
         if iterations > MAX_RETRIES:
             raise TimeoutError("iteration exceeded MAX_RETRIES")
         iterations += 1
@@ -127,7 +127,7 @@ def iter_modifications(gen_id: int):
 
     # Creating player conditions
     upper_floor_player_combs = UpperFloorCombinationsWithPlayers(upper_floor_combs.upper_floor_combinations_only_rooms)
-    while (len(upper_floor_player_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs) > MAX_UPPER_FLOOR_PLAYER_COMBINATIONS):
+    while ((len(upper_floor_player_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs) > MAX_UPPER_FLOOR_PLAYER_COMBINATIONS) and (len(all_conds) < 12)):
         if iterations > MAX_RETRIES:
             raise TimeoutError("iteration exceeded MAX_RETRIES")
         iterations += 1
@@ -144,7 +144,7 @@ def iter_modifications(gen_id: int):
 
     # Creating house conditions
     house_combs = HouseCombinations(upper_floor_player_combs.upper_floor_combinations_with_players, livingroom_wall_combs.room_wall_combinations, kitchen_wall_combs.room_wall_combinations)
-    while len(house_combs) > MAX_HOUSE_COMBINATIONS:
+    while (len(house_combs) > MAX_HOUSE_COMBINATIONS) and (len(all_conds) < 12):
         if iterations > MAX_RETRIES:
             raise TimeoutError("iteration exceeded MAX_RETRIES")
         iterations += 1
@@ -165,7 +165,8 @@ def iter_modifications(gen_id: int):
 
     print(f"\n{len(all_conds)}")
     if len(all_conds) == 12:
-        gen_pdf_version(all_conds, f"../new_scenarios/pdfs/{str(SET_SEED)}_{str(gen_id)}.pdf", str(gen_id))
+        gen_pdf_version(all_conds, f"../new_scenarios/pdfs/ger_{str(SET_SEED)}_{str(gen_id)}.pdf", str(gen_id), len(house_combs), "ger")
+        gen_pdf_version(all_conds, f"../new_scenarios/pdfs/eng_{str(SET_SEED)}_{str(gen_id)}.pdf", str(gen_id), len(house_combs), "eng")
     player_1_conds, player_2_conds, player_3_conds, player_4_conds = split_conds_to_4_players(all_conds)
     for idx, player_conds in enumerate([player_1_conds, player_2_conds, player_3_conds, player_4_conds]):
         if SHOW_PRINTS:
@@ -185,7 +186,7 @@ def iter_modifications(gen_id: int):
 
 
 if __name__ == '__main__':
-    for idx in tqdm(range(1000)):
+    for idx in tqdm(range(10000)):
         try:
             iter_modifications(idx)
         except TimeoutError:
