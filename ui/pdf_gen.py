@@ -7,41 +7,45 @@ from common.data_classes import ConditionOutput
 from ui.conditions import split_conds_to_4_players
 
 
-def gen_pdf_version(all_conds: List[ConditionOutput], filename: str, game_ident: str):
-    c = canvas.Canvas(filename, pagesize=letter)
+def gen_pdf_version(all_conds: List[ConditionOutput], filename: str, game_ident: str, nr_house_combs: int, language: str):
+    c = canvas.Canvas(filename, pagesize=(letter[1], letter[0]))
     c.setFont("Helvetica", 10)
     all_player_conds = split_conds_to_4_players(all_conds)
 
-    first_y = 750
-    second_y = 550
-    third_y = 350
-    fourth_y = 150
+    info_y = 550
+    first_y = 420
+    second_y = 320
+    third_y = 220
+    fourth_y = 120
 
-    left_x = 100
-    right_x = 400
+    row_distance = 20
 
-    # Player 1
-    c.drawString(left_x, first_y, f"Player 1: {game_ident}")
-    for idx, cond in enumerate(all_player_conds[0]):
-        c.drawString(left_x, first_y - 25 - idx * 20, f"{idx+1}: {str(cond)}")
-    c.line(left_x, first_y - (idx + 2) * 20 - 25, right_x,  first_y - (idx + 2) * 20 - 25)
+    left_x = 30
+    right_x = 600
 
-    # Player 2
-    c.drawString(left_x, second_y, f"Player 2: {game_ident}")
-    for idx, cond in enumerate(all_player_conds[1]):
-        c.drawString(left_x, second_y - 25 - idx * 20, f"{idx+1}: {str(cond)}")
-    c.line(left_x, second_y - (idx + 2) * 20 - 25, right_x, second_y - (idx + 2) * 20 - 25)
+    # Scenario info
+    c.drawString(left_x, info_y, f"Nr of possible house combs: {nr_house_combs}")
+    c.line(left_x, info_y-30, right_x, info_y-30)
 
-    # Player 3
-    c.drawString(left_x, third_y, f"Player 3: {game_ident}")
-    for idx, cond in enumerate(all_player_conds[2]):
-        c.drawString(left_x, third_y - 25 - idx * 20, f"{idx+1}: {str(cond)}")
-    c.line(left_x, third_y - (idx + 2) * 20 - 25, right_x, third_y - (idx + 2) * 20 - 25)
+    # Player information
+    players_info = [
+        {"y": first_y, "text": "Player 1"},
+        {"y": second_y, "text": "Player 2"},
+        {"y": third_y, "text": "Player 3"},
+        {"y": fourth_y, "text": "Player 4"}
+    ]
 
-    # Player 4
-    c.drawString(left_x, fourth_y, f"Player 4: {game_ident}")
-    for idx, cond in enumerate(all_player_conds[3]):
-        c.drawString(left_x, fourth_y - 25 - idx * 20, f"{idx+1}: {str(cond)}")
+    for player_info, player_conds in zip(players_info, all_player_conds):
+        c.drawString(left_x, player_info["y"], f"{player_info['text']}: {game_ident}")
+        for idx, cond in enumerate(player_conds):
+            if language == "ger":
+                text = cond.german_cond
+            elif language == 'eng':
+                text = cond.english_cond
+            else:
+                raise NotImplementedError
+            c.drawString(left_x, player_info["y"] - 25 - idx * row_distance, f"{idx+1}: {text}")
+        c.line(left_x, player_info["y"] - (idx + 1) * row_distance - 20, right_x, player_info["y"] - (idx + 1) * row_distance - 20)
 
     c.showPage()
     c.save()
