@@ -24,7 +24,7 @@ def gen_pdf_version(all_conds: List[ConditionOutput], filename: str, game_ident:
     right_x = 600
 
     # Scenario info
-    c.drawString(left_x, info_y, f"Nr of possible house combs: {nr_house_combs}")
+    c.drawString(left_x, info_y, f"Game_ID: {game_ident}, Nr of possible house combs: {nr_house_combs}")
     c.line(left_x, info_y-30, right_x, info_y-30)
 
     # Player information
