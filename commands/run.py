@@ -3,8 +3,6 @@ import multiprocessing
 import random
 from copy import deepcopy
 
-from tqdm import tqdm
-
 from combinations.c01_room_combinations_lvl_obj import RoomItemCombinations, get_random_method_room_obj
 from combinations.c02_room_combinations_lvl_wall import RoomCombinationsWithWalls, \
     get_random_method_room_with_wall
@@ -16,7 +14,7 @@ from common.constants import MAX_RETRIES
 from house.rooms import Room
 from new_scenarios.config import MAX_ROOM_OBJ_COMBINATIONS, MAX_ROOM_WALL_COMBINATIONS, \
     MAX_UPPER_FLOOR_ROOM_COMBINATIONS, MAX_UPPER_FLOOR_PLAYER_COMBINATIONS, CHANCE_OF_ALL_ROOM_WALL_COND, \
-    CHANCE_OF_ALL_ROOM_OBJ_COND, SET_SEED, SHOW_PRINTS
+    CHANCE_OF_ALL_ROOM_OBJ_COND, SET_SEED, SHOW_PRINTS, NR_TRIES
 from ui.conditions import split_conds_to_4_players
 from ui.pdf_gen import gen_pdf_version
 
@@ -165,10 +163,10 @@ def iter_modifications(gen_id: int):
         for cond in all_conds:
             print(cond)
 
-    print(f"\n{len(all_conds)}")
     if len(all_conds) == 12:
+        print(f"Found a solution with 12 conditions: {SET_SEED}_{gen_id}!\n")
         gen_pdf_version(all_conds, f"../new_scenarios/pdfs/ger_{str(SET_SEED)}_{str(gen_id)}.pdf", f"{SET_SEED}_{gen_id}", len(house_combs), "ger")
-        gen_pdf_version(all_conds, f"../new_scenarios/pdfs/eng_{str(SET_SEED)}_{str(gen_id)}.pdf", str(gen_id), len(house_combs), "eng")
+        gen_pdf_version(all_conds, f"../new_scenarios/pdfs/eng_{str(SET_SEED)}_{str(gen_id)}.pdf", f"{SET_SEED}_{gen_id}", len(house_combs), "eng")
     player_1_conds, player_2_conds, player_3_conds, player_4_conds = split_conds_to_4_players(all_conds)
     for idx, player_conds in enumerate([player_1_conds, player_2_conds, player_3_conds, player_4_conds]):
         if SHOW_PRINTS:
@@ -199,9 +197,9 @@ if __name__ == "__main__":
     num_cores = multiprocessing.cpu_count()
     max_workers = min(32, num_cores * 5)
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+    with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
         futures = []
-        for idx in tqdm(range(10000)):
+        for idx in range(NR_TRIES):
             futures.append(executor.submit(process_iteration, idx))
 
         results = []
