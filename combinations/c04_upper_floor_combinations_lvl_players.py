@@ -6,8 +6,7 @@ from combinations.utils import get_rooms_and_players_from_single_upper_floor_com
 from common.constants import OBJ_COLORS, STYLES, OBJ_TYPES
 from common.data_classes import ConditionOutput
 from common.utils import check_for_inval_cond
-from house.rooms.rooms import get_room_from_color_and_name
-from new_scenarios.config import DEBUG_MODE, USED_LANGUAGE
+from house.rooms import get_room_from_color_and_name
 
 
 class UpperFloorCombinationsWithPlayers:

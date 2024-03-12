@@ -5,7 +5,6 @@ import random
 from common.constants import OBJ_COLORS, STYLES, OBJ_TYPES
 from common.data_classes import ConditionOutput
 from common.utils import check_for_inval_cond
-from new_scenarios.config import DEBUG_MODE, USED_LANGUAGE
 
 
 class RoomCombinationsWithWalls:

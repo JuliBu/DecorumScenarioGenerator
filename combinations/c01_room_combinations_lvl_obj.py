@@ -7,8 +7,7 @@ from common.constants import OBJ_COLORS, POSITIONS, STYLES, OBJ_TYPES, OBJ_ATTRI
 from common.data_classes import ConditionOutput
 from common.utils import check_for_inval_cond
 from house.objects import get_obj_style
-from house.rooms.rooms import get_type_from_room_and_pos
-from new_scenarios.config import USED_LANGUAGE, DEBUG_MODE
+from house.rooms import get_type_from_room_and_pos
 
 
 class RoomItemCombinations:

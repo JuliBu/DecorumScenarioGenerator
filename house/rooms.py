@@ -1,10 +1,7 @@
-import itertools
-from copy import deepcopy
 from typing import Optional, List, Union, Tuple
 
 from common.constants import AVAILABLE_ROOMS, OBJ_COLORS, POSITIONS, STYLES
 from house.objects import DecorumObject, get_obj_style
-from common.utils import check_for_inval_cond
 
 
 class Room:
@@ -20,31 +17,6 @@ class Room:
         self.middle_object = middle_object
         self.right_object = right_object
 
-    def set_wall_color(self, new_color: str):
-        assert new_color in OBJ_COLORS
-        self.wall_color = new_color
-
-    def place_object(self, decorum_object: DecorumObject):
-        room_pos = get_position_of_object_from_room_and_type(self.name, decorum_object.obj_type)
-        if room_pos is None:
-            return
-        elif room_pos == "left":
-            self.left_object = decorum_object
-        elif room_pos == "middle":
-            self.middle_object = decorum_object
-        elif room_pos == "right":
-            self.right_object = decorum_object
-        else:
-            raise ValueError("Room position is neither left nor middle nor right.")
-
-    def remove_object_from_pos(self, pos: str):
-        assert pos in POSITIONS
-        if pos == "left":
-            self.left_object = None
-        elif pos == "middle":
-            self.middle_object = None
-        elif pos == "right":
-            self.right_object = None
 
     def get_object_from_pos(self, position: str) -> Union[DecorumObject, None]:
         assert position in POSITIONS

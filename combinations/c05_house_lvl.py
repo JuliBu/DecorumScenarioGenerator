@@ -6,7 +6,7 @@ from combinations.utils import get_all_rooms_and_players_from_single_house_comb
 from common.constants import OBJ_COLORS, STYLES, OBJ_TYPES, OBJ_ATTRIBUTES
 from common.data_classes import ConditionOutput
 from common.utils import check_for_inval_cond, most_common_string, least_common_string
-from house.rooms.rooms import get_room_from_color_and_name
+from house.rooms import get_room_from_color_and_name
 
 
 class HouseCombinations:
@@ -52,8 +52,6 @@ class HouseCombinations:
         assert cond_color in OBJ_COLORS
         assert cond_style in STYLES
         assert cond_type in OBJ_TYPES
-
-        # ToDo: Check what happens with Nones
 
         new_combs = []
         for house_comb in self.house_combs:

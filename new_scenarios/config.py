@@ -1,6 +1,5 @@
 DEBUG_MODE = False
 SET_SEED = 15
-# 4
 
 CHANCE_OF_ALL_ROOM_OBJ_COND = 0.6
 CHANCE_OF_ALL_ROOM_WALL_COND = 0.7
@@ -11,9 +10,9 @@ MAX_UPPER_FLOOR_ROOM_COMBINATIONS = 300_000
 MAX_UPPER_FLOOR_PLAYER_COMBINATIONS = 100_000
 # MAX_HOUSE_COMBINATIONS = 1_000
 
-USED_LANGUAGE = "german"
-
 SHOW_PRINTS = False
+
+USED_LANGUAGE = "german"
 """
-Can be german or english
+Can be german or english, only relevant if SHOW_PRINTS; pdfs are always generated in both languages
 """

@@ -5,7 +5,7 @@ import random
 from common.constants import OBJ_COLORS, STYLES, OBJ_TYPES
 from common.data_classes import ConditionOutput
 from common.utils import check_for_inval_cond
-from house.rooms.rooms import get_room_from_color_and_name
+from house.rooms import get_room_from_color_and_name
 
 
 class UpperFloorCombinationsOnlyRooms:
