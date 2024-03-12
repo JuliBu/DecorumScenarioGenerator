@@ -1,4 +1,6 @@
+import concurrent.futures
 import random
+import multiprocessing
 from copy import deepcopy
 
 from tqdm import tqdm
@@ -144,7 +146,7 @@ def iter_modifications(gen_id: int):
 
     # Creating house conditions
     house_combs = HouseCombinations(upper_floor_player_combs.upper_floor_combinations_with_players, livingroom_wall_combs.room_wall_combinations, kitchen_wall_combs.room_wall_combinations)
-    while (len(house_combs) > MAX_HOUSE_COMBINATIONS) and (len(all_conds) < 12):
+    while len(all_conds) < 12:
         if iterations > MAX_RETRIES:
             raise TimeoutError("iteration exceeded MAX_RETRIES")
         iterations += 1
@@ -165,7 +167,7 @@ def iter_modifications(gen_id: int):
 
     print(f"\n{len(all_conds)}")
     if len(all_conds) == 12:
-        gen_pdf_version(all_conds, f"../new_scenarios/pdfs/ger_{str(SET_SEED)}_{str(gen_id)}.pdf", str(gen_id), len(house_combs), "ger")
+        gen_pdf_version(all_conds, f"../new_scenarios/pdfs/ger_{str(SET_SEED)}_{str(gen_id)}.pdf", f"{SET_SEED}_{gen_id}", len(house_combs), "ger")
         gen_pdf_version(all_conds, f"../new_scenarios/pdfs/eng_{str(SET_SEED)}_{str(gen_id)}.pdf", str(gen_id), len(house_combs), "eng")
     player_1_conds, player_2_conds, player_3_conds, player_4_conds = split_conds_to_4_players(all_conds)
     for idx, player_conds in enumerate([player_1_conds, player_2_conds, player_3_conds, player_4_conds]):
@@ -185,9 +187,23 @@ def iter_modifications(gen_id: int):
             print(players)
 
 
-if __name__ == '__main__':
-    for idx in tqdm(range(10000)):
-        try:
-            iter_modifications(idx)
-        except TimeoutError:
-            pass
+def process_iteration(idx):
+    try:
+        iter_modifications(idx)
+        return idx, None
+    except TimeoutError:
+        return idx, TimeoutError
+
+
+if __name__ == "__main__":
+    num_cores = multiprocessing.cpu_count()
+    max_workers = min(32, num_cores * 5)
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = []
+        for idx in tqdm(range(10000)):
+            futures.append(executor.submit(process_iteration, idx))
+
+        results = []
+        for future in concurrent.futures.as_completed(futures):
+            results.append(future.result())
