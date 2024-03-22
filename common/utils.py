@@ -12,13 +12,15 @@ def most_common_string(list_of_str: List[str], str_to_check: str) -> bool:
     if len(list_of_str) == 0:
         return False
     string_counts = Counter(list_of_str)
-    most_common, count = string_counts.most_common(1)[0]
-    return most_common == str_to_check
+    most_common, most_count = string_counts.most_common()[0]
+    sec_most_common, sec_most_count = string_counts.most_common()[1]
+    return (most_common == str_to_check) and (most_count > sec_most_count)
 
 
 def least_common_string(list_of_str: List[str], str_to_check: str) -> bool:
     if len(list_of_str) == 0:
         return False
     string_counts = Counter(list_of_str)
-    least_common, count = string_counts.most_common()[-1]
-    return least_common == str_to_check
+    least_common, least_count = string_counts.most_common()[-1]
+    sec_least_common, sec_least_count = string_counts.most_common()[-2]
+    return (least_common == str_to_check) and (least_count < sec_least_count)
