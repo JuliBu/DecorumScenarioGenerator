@@ -53,10 +53,10 @@ class UpperFloorCombinationsWithPlayers:
         self.upper_floor_combinations_with_players = new_combs
 
         if mode == "min":
-            ger_output = f"In deinem Zimmern müssen mindestens {nr_elems_0_to_4} Elemente der Farbe {color} angehören!"
+            ger_output = f"In deinem Zimmer müssen mindestens {nr_elems_0_to_4} Elemente der Farbe {color} angehören!"
             eng_output = f"In your rooms, there must be at least {nr_elems_0_to_4} elements belonging to the color {color}!"
         elif mode == "max":
-            ger_output = f"In deinem Zimmern dürfen höchstens {nr_elems_0_to_4} Elemente der Farbe {color} angehören!"
+            ger_output = f"In deinem Zimmer dürfen höchstens {nr_elems_0_to_4} Elemente der Farbe {color} angehören!"
             eng_output = f"In your rooms, there may be at most {nr_elems_0_to_4} elements belonging to the color {color}!"
         else:
             raise ValueError
