@@ -2,8 +2,9 @@ import inspect
 import itertools
 import random
 
+from combinations.utils import get_weighted_random_method
 from common.constants import OBJ_COLORS, STYLES, OBJ_TYPES
-from common.data_classes import ConditionOutput
+from common.data_classes import ConditionOutput, MethodWithWeight
 from common.utils import check_for_inval_cond
 from house.rooms import get_room_from_color_and_name
 
@@ -86,9 +87,9 @@ class UpperFloorCombinationsOnlyRooms:
             'obj_type': random.choice(OBJ_TYPES),
             'should_be_available': random.choice([True, False])
         }
-        methods = [
-            self.filter_floor_items_by_color_and_quantity,
+        methods_with_weights = [
+            MethodWithWeight(self.filter_floor_items_by_color_and_quantity, 5),
         ]
-        random_method = random.choice(methods)
+        random_method = get_weighted_random_method(methods_with_weights)
         method_args = {param: params[param] for param in params if param in inspect.signature(random_method).parameters}
         return random_method(**method_args)

@@ -2,9 +2,10 @@ import inspect
 import itertools
 import random
 
-from combinations.utils import get_rooms_and_players_from_single_upper_floor_combination_with_players
+from combinations.utils import get_rooms_and_players_from_single_upper_floor_combination_with_players, \
+    get_weighted_random_method
 from common.constants import OBJ_COLORS, STYLES, OBJ_TYPES
-from common.data_classes import ConditionOutput
+from common.data_classes import ConditionOutput, MethodWithWeight
 from common.utils import check_for_inval_cond
 from house.rooms import get_room_from_color_and_name
 
@@ -126,18 +127,10 @@ class UpperFloorCombinationsWithPlayers:
             'player_b': player_b
         }
         methods_with_weights = [
-            (self.player_color_elem_in_room, 15),
-            (self.player_a_avoids_player_b, 1),
+            MethodWithWeight(self.player_color_elem_in_room, 15),
+            MethodWithWeight(self.player_a_avoids_player_b, 1),
         ]
-        total_weight = sum(weight for method, weight in methods_with_weights)
-        random_number = random.uniform(0, total_weight)
-        cumulative_weight = 0
-
-        for method, weight in methods_with_weights:
-            cumulative_weight += weight
-            if random_number < cumulative_weight:
-                random_method = method
-                break
+        random_method = get_weighted_random_method(methods_with_weights)
 
         method_args = {param: params[param] for param in params if param in inspect.signature(random_method).parameters}
         return random_method(**method_args)

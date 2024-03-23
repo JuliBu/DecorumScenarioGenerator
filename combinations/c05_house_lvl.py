@@ -2,9 +2,9 @@ import inspect
 import itertools
 import random
 
-from combinations.utils import get_all_rooms_and_players_from_single_house_comb
+from combinations.utils import get_all_rooms_and_players_from_single_house_comb, get_weighted_random_method
 from common.constants import OBJ_COLORS, STYLES, OBJ_TYPES, OBJ_ATTRIBUTES
-from common.data_classes import ConditionOutput
+from common.data_classes import ConditionOutput, MethodWithWeight
 from common.utils import check_for_inval_cond, most_common_string, least_common_string
 from house.rooms import get_room_from_color_and_name
 
@@ -139,10 +139,10 @@ class HouseCombinations:
             'most_least': random.choice(["most", "least"]),
             'attr': random.choice(OBJ_ATTRIBUTES),
         }
-        methods = [
-            self.house_color_elems,
-            self.house_attr_most_or_least
+        methods_with_weights = [
+            MethodWithWeight(self.house_color_elems, 5),
+            MethodWithWeight(self.house_attr_most_or_least, 5)
         ]
-        random_method = random.choice(methods)
+        random_method = get_weighted_random_method(methods_with_weights)
         method_args = {param: params[param] for param in params if param in inspect.signature(random_method).parameters}
         return random_method(**method_args)

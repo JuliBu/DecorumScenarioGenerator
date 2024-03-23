@@ -1,4 +1,7 @@
+from typing import List
+
 from common.constants import OBJ_ATTRIBUTES, STYLES, OBJ_TYPES, OBJ_COLORS
+from common.data_classes import MethodWithWeight
 
 
 def get_rooms_and_players_from_single_upper_floor_combination_with_players(single_upper_floor_combination_with_players):
@@ -30,3 +33,14 @@ def get_attr_value(attribute: str, obj_style: str, obj_type: str, obj_color: str
         return obj_color
     else:
         raise NotImplementedError
+
+
+def get_weighted_random_method(methods_with_weights: List[MethodWithWeight]):
+    total_weight = sum(method_with_weight.weight for method_with_weight in methods_with_weights)
+    random_number = random.uniform(0, total_weight)
+    cumulative_weight = 0
+
+    for method_with_weight in methods_with_weights:
+        cumulative_weight += method_with_weight.weight
+        if random_number < cumulative_weight:
+            return method_with_weight.method

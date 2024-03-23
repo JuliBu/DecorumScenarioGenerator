@@ -2,9 +2,9 @@ import inspect
 import itertools
 import random
 
-from combinations.utils import get_attr_value
+from combinations.utils import get_attr_value, get_weighted_random_method
 from common.constants import OBJ_COLORS, POSITIONS, STYLES, OBJ_TYPES, OBJ_ATTRIBUTES
-from common.data_classes import ConditionOutput
+from common.data_classes import ConditionOutput, MethodWithWeight
 from common.utils import check_for_inval_cond
 from house.objects import get_obj_style
 from house.rooms import get_type_from_room_and_pos
@@ -221,13 +221,13 @@ def get_random_method_room_obj():
         'obj_attr1': obj_attr1,
         'obj_attr2': obj_attr2,
     }
-    methods = [
-        RoomItemCombinations.filter_items_by_color_and_quantity,
-        RoomItemCombinations.filter_availability_of_type,
-        RoomItemCombinations.filter_if_x_avail_then_y_avail,
-        RoomItemCombinations.filter_if_x_avail_then_y_avail,
+    methods_with_weights = [
+        MethodWithWeight(RoomItemCombinations.filter_items_by_color_and_quantity, 5),
+        MethodWithWeight(RoomItemCombinations.filter_availability_of_type, 5),
+        MethodWithWeight(RoomItemCombinations.filter_if_x_avail_then_y_avail, 5),
+        MethodWithWeight(RoomItemCombinations.filter_if_x_avail_then_y_avail, 5),
     ]
-    random_method = random.choice(methods)
+    random_method = get_weighted_random_method(methods_with_weights)
     method_args = {param: params[param] for param in params if param in inspect.signature(random_method).parameters}
     return random_method, method_args
 

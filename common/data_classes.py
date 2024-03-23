@@ -21,3 +21,9 @@ class ConditionOutput:
             out_str = f"Specific_player: {self.specific_player}, " + out_str
 
         return out_str
+
+
+class MethodWithWeight:
+    def __init__(self, method, weight: float):
+        self.method = method
+        self.weight = weight
