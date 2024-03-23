@@ -1,4 +1,5 @@
 from typing import List
+import random
 
 from common.constants import OBJ_ATTRIBUTES, STYLES, OBJ_TYPES, OBJ_COLORS
 from common.data_classes import MethodWithWeight
