@@ -191,11 +191,17 @@ def iter_modifications(gen_id: int):
             print(f"Number of conditions: {len(all_conds)}")
             print(f"possible solutions: {len(house_combs)}")
             print("\nOne possible solution:\n")
-            out_bedroom1, out_bedroom2, players_left, players_right, livingroom, kitchen = get_all_rooms_and_players_from_single_house_comb(house_combs.house_combs[0])
+        out_bedroom1, out_bedroom2, players_left, players_right, livingroom, kitchen = get_all_rooms_and_players_from_single_house_comb(house_combs.house_combs[0])
+        with open(f"../new_scenarios/pdfs/solution_{str(SET_SEED)}_{str(gen_id)}.txt", "w") as file:
+            file.write("\nOne possible solution (bedroom1, bedroom2, livingroom, kitchen), (bedroom1_players, bedroom2_players):\n")
             for room in [out_bedroom1, out_bedroom2, livingroom, kitchen]:
-                print(room)
+                file.write(f"{room} \n")
+                if SHOW_PRINTS:
+                    print(room)
             for players in [players_left, players_right]:
-                print(players)
+                file.write(str(players) + "\n")
+                if SHOW_PRINTS:
+                    print(players)
 
 
 def process_iteration(idx):
