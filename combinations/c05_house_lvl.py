@@ -79,9 +79,9 @@ class HouseCombinations:
                     raise ValueError
 
             if most_least == "most" and (
-                    (attr == "color" and most_common_string(objs_attr, cond_color)) or
-                    (attr == "obj_type" and most_common_string(objs_attr, cond_type)) or
-                    (attr == "style" and most_common_string(objs_attr, cond_style))):
+                    (attr == "color" and most_common_string(objs_attr, cond_color, OBJ_COLORS)) or
+                    (attr == "obj_type" and most_common_string(objs_attr, cond_type, OBJ_TYPES)) or
+                    (attr == "style" and most_common_string(objs_attr, cond_style, STYLES))):
                 new_combs.append(house_comb)
             elif most_least == "least" and (
                     (attr == "color" and least_common_string(objs_attr, cond_color, OBJ_COLORS)) or
