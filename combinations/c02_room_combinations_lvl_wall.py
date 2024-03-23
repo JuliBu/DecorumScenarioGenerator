@@ -37,8 +37,6 @@ class RoomCombinationsWithWalls:
                 new_combs.append((obj_comb, wall_color))
             elif mode == "exact" and obj_comb.count(wall_color) == nr_items:
                 new_combs.append((obj_comb, wall_color))
-            else:
-                raise ValueError
 
         check_for_inval_cond(new_combs, len(self.room_wall_combinations))
         self.room_wall_combinations = new_combs

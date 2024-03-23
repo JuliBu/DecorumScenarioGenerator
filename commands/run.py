@@ -14,7 +14,7 @@ from common.constants import MAX_RETRIES
 from house.rooms import Room
 from new_scenarios.config import MAX_ROOM_OBJ_COMBINATIONS, MAX_ROOM_WALL_COMBINATIONS, \
     MAX_UPPER_FLOOR_ROOM_COMBINATIONS, MAX_UPPER_FLOOR_PLAYER_COMBINATIONS, CHANCE_OF_ALL_ROOM_WALL_COND, \
-    CHANCE_OF_ALL_ROOM_OBJ_COND, SET_SEED, SHOW_PRINTS, NR_TRIES
+    CHANCE_OF_ALL_ROOM_OBJ_COND, SET_SEED, SHOW_PRINTS, NR_TRIES, USE_PARALLELIZATION
 from ui.conditions import split_conds_to_4_players
 from ui.pdf_gen import gen_pdf_version
 
@@ -194,14 +194,16 @@ def process_iteration(idx):
 
 
 if __name__ == "__main__":
-    num_cores = multiprocessing.cpu_count()
-    max_workers = min(32, num_cores * 5)
-
-    with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
-        futures = []
+    if USE_PARALLELIZATION:
+        num_cores = multiprocessing.cpu_count()
+        max_workers = min(32, num_cores * 5)
+        with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
+            futures = []
+            for idx in range(NR_TRIES):
+                futures.append(executor.submit(process_iteration, idx))
+            results = []
+            for future in concurrent.futures.as_completed(futures):
+                results.append(future.result())
+    else:
         for idx in range(NR_TRIES):
-            futures.append(executor.submit(process_iteration, idx))
-
-        results = []
-        for future in concurrent.futures.as_completed(futures):
-            results.append(future.result())
+            process_iteration(idx)

@@ -17,10 +17,19 @@ def most_common_string(list_of_str: List[str], str_to_check: str) -> bool:
     return (most_common == str_to_check) and (most_count > sec_most_count)
 
 
-def least_common_string(list_of_str: List[str], str_to_check: str) -> bool:
+def count_string_occurrences(list_of_str: List[str], possible_values: List[str]) -> Counter:
+    string_counter = Counter()
+    for string in list_of_str:
+        if string in possible_values:
+            string_counter[string] += 1
+    return string_counter
+
+
+def least_common_string(list_of_str: List[str], str_to_check: str, possible_values: List[str]) -> bool:
     if len(list_of_str) == 0:
         return False
-    string_counts = Counter(list_of_str)
-    least_common, least_count = string_counts.most_common()[-1]
-    sec_least_common, sec_least_count = string_counts.most_common()[-2]
-    return (least_common == str_to_check) and (least_count < sec_least_count)
+    str_counter = count_string_occurrences(list_of_str, possible_values)
+    for possible_value in possible_values:
+        if str_counter[possible_value] <= str_counter[str_to_check] and possible_value != str_to_check:
+            return False
+    return True
