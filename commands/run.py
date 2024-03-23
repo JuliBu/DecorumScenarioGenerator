@@ -16,7 +16,8 @@ from common.constants import MAX_RETRIES
 from house.rooms import Room
 from new_scenarios.config import MAX_ROOM_OBJ_COMBINATIONS, MAX_ROOM_WALL_COMBINATIONS, \
     MAX_UPPER_FLOOR_ROOM_COMBINATIONS, MAX_UPPER_FLOOR_PLAYER_COMBINATIONS, CHANCE_OF_ALL_ROOM_WALL_COND, \
-    CHANCE_OF_ALL_ROOM_OBJ_COND, SET_SEED, SHOW_PRINTS, NR_TRIES, USE_PARALLELIZATION, MAX_HOUSE_COMBINATIONS
+    CHANCE_OF_ALL_ROOM_OBJ_COND, SET_SEED, SHOW_PRINTS, NR_TRIES, USE_PARALLELIZATION, MAX_HOUSE_COMBINATIONS, \
+    MAX_COMBS_TO_CALC
 from ui.conditions import split_conds_to_4_players
 from ui.pdf_gen import gen_pdf_version
 
@@ -109,6 +110,9 @@ def iter_modifications(gen_id: int):
             # print(f"{e}")
             pass
 
+    if len(bedroom1_wall_combs.room_wall_combinations) * len(bedroom2_wall_combs.room_wall_combinations) > MAX_COMBS_TO_CALC:
+        raise TimeoutError("Too many combs to calc")
+
     # Creating conditions for upper floor
     upper_floor_combs = UpperFloorCombinationsOnlyRooms(bedroom1_wall_combs.room_wall_combinations, bedroom2_wall_combs.room_wall_combinations)
     while ((len(upper_floor_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs) > MAX_UPPER_FLOOR_ROOM_COMBINATIONS) and (len(all_conds) < 12)):
@@ -127,6 +131,8 @@ def iter_modifications(gen_id: int):
             # print(f"{e}")
             pass
 
+    if len(upper_floor_combs.upper_floor_combinations_only_rooms) * 6 > MAX_COMBS_TO_CALC:
+        raise TimeoutError("Too many combs to calc")
     # Creating player conditions
     upper_floor_player_combs = UpperFloorCombinationsWithPlayers(upper_floor_combs.upper_floor_combinations_only_rooms)
     while ((len(upper_floor_player_combs) * len(livingroom_wall_combs) * len(kitchen_wall_combs) > MAX_UPPER_FLOOR_PLAYER_COMBINATIONS) and (len(all_conds) < 12)):
@@ -144,6 +150,10 @@ def iter_modifications(gen_id: int):
         except ValueError as e:
             pass
 
+    if len(upper_floor_player_combs.upper_floor_combinations_with_players) * \
+            len(livingroom_wall_combs.room_wall_combinations) * \
+            len(kitchen_wall_combs.room_wall_combinations) > MAX_COMBS_TO_CALC:
+        raise TimeoutError("Too many combs to calc")
     # Creating house conditions
     house_combs = HouseCombinations(upper_floor_player_combs.upper_floor_combinations_with_players, livingroom_wall_combs.room_wall_combinations, kitchen_wall_combs.room_wall_combinations)
     while len(all_conds) < 12:
