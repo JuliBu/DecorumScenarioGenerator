@@ -7,7 +7,7 @@
 - All scenarios use the back-side of the board where the players live in the two bedrooms.
 - For playing it could be useful to print every sheet two times, s.t. each player receives one sheet for his own and can cut the second one in snippets to forward them to the other players after every 5 rounds.
 ## Functionality
-If you want to create new scenarios, you need to pip-install reportlab for generating the pdf output.
+If you want to create new scenarios, you need to pip-install `fpdf` for generating the pdf output, as well as `tqdm` for displaying a progress bar.
 ### Config
 There are multiple parameters you can set within the config:
 - SET_SEED: You can set a seed in the config to your favourite number
