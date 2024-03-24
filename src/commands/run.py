@@ -225,6 +225,4 @@ if __name__ == "__main__":
                 results.append(future.result())
     else:
         for idx in tqdm(range(NR_TRIES)):
-            if idx == 5:
-                print("")
             process_iteration(idx)
