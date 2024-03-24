@@ -1,7 +1,7 @@
 import random
 from typing import List, Tuple
 
-from common.data_classes import ConditionOutput
+from src.common.data_classes import ConditionOutput
 
 
 def split_conds_to_4_players(unsorted_conds: List[ConditionOutput]) -> Tuple[List[ConditionOutput], List[ConditionOutput], List[ConditionOutput], List[ConditionOutput]]:

@@ -5,21 +5,21 @@ from copy import deepcopy
 
 from tqdm import tqdm
 
-from combinations.c01_room_combinations_lvl_obj import RoomItemCombinations, get_random_method_room_obj
-from combinations.c02_room_combinations_lvl_wall import RoomCombinationsWithWalls, \
+from src.combinations.c01_room_combinations_lvl_obj import RoomItemCombinations, get_random_method_room_obj
+from src.combinations.c02_room_combinations_lvl_wall import RoomCombinationsWithWalls, \
     get_random_method_room_with_wall
-from combinations.c03_upper_floor_combinations_lvl_rooms import UpperFloorCombinationsOnlyRooms
-from combinations.c04_upper_floor_combinations_lvl_players import UpperFloorCombinationsWithPlayers
-from combinations.c05_house_lvl import HouseCombinations
-from combinations.utils import get_all_rooms_and_players_from_single_house_comb
-from common.constants import MAX_RETRIES
-from house.rooms import Room
+from src.combinations.c03_upper_floor_combinations_lvl_rooms import UpperFloorCombinationsOnlyRooms
+from src.combinations.c04_upper_floor_combinations_lvl_players import UpperFloorCombinationsWithPlayers
+from src.combinations.c05_house_lvl import HouseCombinations
+from src.combinations.utils import get_all_rooms_and_players_from_single_house_comb
+from src.common.constants import MAX_RETRIES
+from src.house.rooms import Room
 from new_scenarios.config import MAX_ROOM_OBJ_COMBINATIONS, MAX_ROOM_WALL_COMBINATIONS, \
     MAX_UPPER_FLOOR_ROOM_COMBINATIONS, MAX_UPPER_FLOOR_PLAYER_COMBINATIONS, CHANCE_OF_ALL_ROOM_WALL_COND, \
     CHANCE_OF_ALL_ROOM_OBJ_COND, SET_SEED, SHOW_PRINTS, NR_TRIES, USE_PARALLELIZATION, MAX_HOUSE_COMBINATIONS, \
     MAX_COMBS_TO_CALC
-from ui.conditions import split_conds_to_4_players
-from ui.pdf_gen import gen_pdf_version
+from src.ui.conditions import split_conds_to_4_players
+from src.ui.pdf_gen import gen_pdf_version
 
 random.seed(SET_SEED)
 

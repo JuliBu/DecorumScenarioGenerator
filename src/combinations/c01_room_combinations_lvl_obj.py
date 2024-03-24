@@ -2,12 +2,12 @@ import inspect
 import itertools
 import random
 
-from combinations.utils import get_attr_value, get_weighted_random_method
-from common.constants import OBJ_COLORS, POSITIONS, STYLES, OBJ_TYPES, OBJ_ATTRIBUTES
-from common.data_classes import ConditionOutput, MethodWithWeight
-from common.utils import check_for_inval_cond
-from house.objects import get_obj_style
-from house.rooms import get_type_from_room_and_pos
+from src.combinations.utils import get_attr_value, get_weighted_random_method
+from src.common.constants import OBJ_COLORS, POSITIONS, STYLES, OBJ_TYPES, OBJ_ATTRIBUTES
+from src.common.data_classes import ConditionOutput, MethodWithWeight
+from src.common.utils import check_for_inval_cond
+from src.house.objects import get_obj_style
+from src.house.rooms import get_type_from_room_and_pos
 
 
 class RoomItemCombinations:

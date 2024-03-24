@@ -1,8 +1,8 @@
 from typing import List
 import random
 
-from common.constants import OBJ_ATTRIBUTES, STYLES, OBJ_TYPES, OBJ_COLORS
-from common.data_classes import MethodWithWeight
+from src.common.constants import OBJ_ATTRIBUTES, STYLES, OBJ_TYPES, OBJ_COLORS
+from src.common.data_classes import MethodWithWeight
 
 
 def get_rooms_and_players_from_single_upper_floor_combination_with_players(single_upper_floor_combination_with_players):

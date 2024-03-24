@@ -3,8 +3,8 @@ from typing import List
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 
-from common.data_classes import ConditionOutput
-from ui.conditions import split_conds_to_4_players
+from src.common.data_classes import ConditionOutput
+from src.ui.conditions import split_conds_to_4_players
 
 
 def gen_pdf_version(all_conds: List[ConditionOutput], filename: str, game_ident: str, nr_house_combs: int, language: str):

@@ -2,11 +2,11 @@ import inspect
 import itertools
 import random
 
-from combinations.utils import get_weighted_random_method
-from common.constants import OBJ_COLORS, STYLES, OBJ_TYPES
-from common.data_classes import ConditionOutput, MethodWithWeight
-from common.utils import check_for_inval_cond
-from house.rooms import get_room_from_color_and_name
+from src.combinations.utils import get_weighted_random_method
+from src.common.constants import OBJ_COLORS, STYLES, OBJ_TYPES
+from src.common.data_classes import ConditionOutput, MethodWithWeight
+from src.common.utils import check_for_inval_cond
+from src.house.rooms import get_room_from_color_and_name
 
 
 class UpperFloorCombinationsOnlyRooms:

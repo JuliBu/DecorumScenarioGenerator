@@ -1,6 +1,6 @@
 from typing import Union
 
-from common.constants import ALLOWED_COMBINATIONS, OBJ_COLORS, OBJ_TYPES
+from src.common.constants import ALLOWED_COMBINATIONS, OBJ_COLORS
 
 
 def get_obj_style(obj_color: str, obj_type: str) -> Union[str, None]:

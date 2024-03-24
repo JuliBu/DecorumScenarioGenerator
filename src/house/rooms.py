@@ -1,7 +1,7 @@
 from typing import Optional, List, Union, Tuple
 
-from common.constants import AVAILABLE_ROOMS, OBJ_COLORS, POSITIONS, STYLES
-from house.objects import DecorumObject, get_obj_style
+from src.common.constants import AVAILABLE_ROOMS, OBJ_COLORS, POSITIONS, STYLES
+from src.house.objects import DecorumObject, get_obj_style
 
 
 class Room:
