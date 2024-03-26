@@ -1,6 +1,6 @@
 import concurrent.futures
 import multiprocessing
-import pathlib
+from pathlib import Path
 import random
 from copy import deepcopy
 
@@ -23,7 +23,7 @@ from src.ui.conditions import split_conds_to_4_players
 from src.ui.pdf_gen import gen_pdf_version
 
 random.seed(SET_SEED)
-project_root_dir = pathlib.Path(__file__).parent.parent.resolve()
+project_root_dir = Path(__file__).parent.parent.resolve()
 
 init_bedroom1 = Room("bedroom1", "red")
 init_bedroom2 = Room("bedroom1", "green")
@@ -179,8 +179,12 @@ def iter_modifications(gen_id: int):
 
     if len(all_conds) == 12 and len(house_combs) < MAX_HOUSE_COMBINATIONS:
         print(f"Found a solution with 12 conditions: {SET_SEED}_{gen_id}!\n")
-        gen_pdf_version(all_conds, f"{project_root_dir}/new_scenarios/pdfs/ger_{str(SET_SEED)}_{str(gen_id)}.pdf", f"{SET_SEED}_{gen_id}", len(house_combs), "ger")
-        gen_pdf_version(all_conds, f"{project_root_dir}/new_scenarios/pdfs/eng_{str(SET_SEED)}_{str(gen_id)}.pdf", f"{SET_SEED}_{gen_id}", len(house_combs), "eng")
+        gen_pdf_version(all_conds, Path(
+            project_root_dir.parent / "new_scenarios" / "pdfs" / f"ger_{str(SET_SEED)}_{str(gen_id)}.pdf"),
+                        f"{SET_SEED}_{gen_id}", len(house_combs), "ger")
+        gen_pdf_version(all_conds, Path(
+            project_root_dir.parent / "new_scenarios" / "pdfs" / f"eng_{str(SET_SEED)}_{str(gen_id)}.pdf"),
+                        f"{SET_SEED}_{gen_id}", len(house_combs), "eng")
 
         player_1_conds, player_2_conds, player_3_conds, player_4_conds = split_conds_to_4_players(all_conds)
         for idx, player_conds in enumerate([player_1_conds, player_2_conds, player_3_conds, player_4_conds]):
@@ -194,7 +198,7 @@ def iter_modifications(gen_id: int):
             print(f"possible solutions: {len(house_combs)}")
             print("\nOne possible solution:\n")
         out_bedroom1, out_bedroom2, players_left, players_right, livingroom, kitchen = get_all_rooms_and_players_from_single_house_comb(house_combs.house_combs[0])
-        with open(f"{project_root_dir}/new_scenarios/pdfs/solution_{str(SET_SEED)}_{str(gen_id)}.txt", "w") as file:
+        with open(Path(project_root_dir.parent / "new_scenarios" / "pdfs" / f"solution_{str(SET_SEED)}_{str(gen_id)}.txt"), "w") as file:
             file.write("\nOne possible solution (bedroom1, bedroom2, livingroom, kitchen), (bedroom1_players, bedroom2_players):\n")
             for room in [out_bedroom1, out_bedroom2, livingroom, kitchen]:
                 file.write(f"{room} \n")

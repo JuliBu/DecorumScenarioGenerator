@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import List
 
 from reportlab.lib.pagesizes import letter
@@ -7,8 +8,8 @@ from src.common.data_classes import ConditionOutput
 from src.ui.conditions import split_conds_to_4_players
 
 
-def gen_pdf_version(all_conds: List[ConditionOutput], filename: str, game_ident: str, nr_house_combs: int, language: str):
-    c = canvas.Canvas(filename, pagesize=(letter[1], letter[0]))
+def gen_pdf_version(all_conds: List[ConditionOutput], output_path: Path, game_ident: str, nr_house_combs: int, language: str):
+    c = canvas.Canvas(str(output_path), pagesize=(letter[1], letter[0]))
     c.setFont("Helvetica", 10)
     all_player_conds = split_conds_to_4_players(all_conds)
 
