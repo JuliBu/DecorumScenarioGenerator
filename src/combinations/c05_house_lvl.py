@@ -221,7 +221,7 @@ class HouseCombinations:
         methods_with_weights = [
             MethodWithWeight(self.house_color_elems, 5),
             MethodWithWeight(self.house_attr_most_or_least, 5),
-            MethodWithWeight(self.house_attr_nr_obj, 50),
+            MethodWithWeight(self.house_attr_nr_obj, 5),
         ]
         random_method = get_weighted_random_method(methods_with_weights)
         method_args = {param: params[param] for param in params if param in inspect.signature(random_method).parameters}
