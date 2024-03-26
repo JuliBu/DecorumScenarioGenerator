@@ -14,7 +14,7 @@ MAX_UPPER_FLOOR_PLAYER_COMBINATIONS = 100_000
 MAX_HOUSE_COMBINATIONS = 1_000
 
 SHOW_PRINTS = False
-USE_PARALLELIZATION = True
+USE_PARALLELIZATION = False
 USED_LANGUAGE = "german"
 """
 Can be german or english, only relevant if SHOW_PRINTS; pdfs are always generated in both languages

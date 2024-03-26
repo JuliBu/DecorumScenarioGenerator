@@ -217,7 +217,7 @@ def process_iteration(idx):
 if __name__ == "__main__":
     if USE_PARALLELIZATION:
         num_cores = multiprocessing.cpu_count()
-        max_workers = min(32, num_cores * 5)
+        max_workers = min(8, num_cores * 5)
         with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
             futures = []
             for idx in range(NR_TRIES):
