@@ -207,6 +207,7 @@ class HouseCombinations:
         params = {
             'nr_items': random.choice(weighted_choices),
             'nr_elems_in_house': random.randint(0, 16),
+            'nr_objs_in_house': random.randint(0, 16),
             'nr_elems_of_attr': random.randint(0, 4),
             'cond_color': random.choice(OBJ_COLORS),
             'mode': random.choice(["min", "max"]),
