@@ -1,4 +1,5 @@
 import concurrent.futures
+import inspect
 import multiprocessing
 from pathlib import Path
 import random
@@ -49,7 +50,7 @@ def iter_modifications(gen_id: int):
         iterations += 1
         try:
             rnd_method, method_args = get_random_method_room_obj()
-            if random.random() < CHANCE_OF_ALL_ROOM_OBJ_COND:
+            if "apply_for_all_rooms" in inspect.signature(rnd_method).parameters and random.random() < CHANCE_OF_ALL_ROOM_OBJ_COND:
                 method_args["apply_for_all_rooms"] = True
                 tmp_conds = []
                 fallback_rooms_combs = deepcopy(rooms_combs)
@@ -90,7 +91,7 @@ def iter_modifications(gen_id: int):
         iterations += 1
         try:
             rnd_method, method_args = get_random_method_room_with_wall()
-            if random.random() < CHANCE_OF_ALL_ROOM_WALL_COND:
+            if "apply_for_all_rooms" in inspect.signature(rnd_method).parameters and random.random() < CHANCE_OF_ALL_ROOM_WALL_COND:
                 method_args["apply_for_all_rooms"] = True
                 tmp_conds = []
                 fallback_wall_comb_rooms = deepcopy(wall_comb_rooms)
