@@ -25,7 +25,8 @@ class RoomCombinationsWithWalls:
             out_str += f"{wall_color=}\n"
         return out_str
 
-    def filter_color_and_quantity_wall(self, nr_items: int, mode: str, apply_for_all_rooms: bool = False) -> ConditionOutput:
+    def filter_color_and_quantity_wall(self, nr_items: int, mode: str, apply_for_all_rooms: bool = False) \
+            -> ConditionOutput:
         assert 0 <= nr_items <= 3
         assert mode in ["min", "max", "exact"]
 
@@ -49,12 +50,27 @@ class RoomCombinationsWithWalls:
 
         return ConditionOutput(eng_output, ger_output)
 
+    def room_has_wall_color(self, cond_color: str) -> ConditionOutput:
+        assert cond_color in OBJ_COLORS
+
+        new_combs = []
+        for obj_comb, wall_color in self.room_wall_combinations:
+            if wall_color == cond_color:
+                new_combs.append((obj_comb, wall_color))
+
+        check_for_inval_cond(new_combs, len(self.room_wall_combinations))
+        self.room_wall_combinations = new_combs
+
+        ger_output = f"Raum {self.room_name} muss {cond_color} gestrichen sein."
+        eng_output = f"Room {self.room_name} must be painted {cond_color}."
+        return ConditionOutput(eng_output, ger_output)
+
 
 def get_random_method_room_with_wall():
     weighted_choices = [1, 1, 2, 2, 0, 3]
     params = {
         'nr_items': random.choice(weighted_choices),
-        'color': random.choice(OBJ_COLORS),
+        'cond_color': random.choice(OBJ_COLORS),
         'mode': random.choice(["min", "max", "exact"]),
         'style': random.choice(STYLES),
         'obj_type': random.choice(OBJ_TYPES),
@@ -63,6 +79,7 @@ def get_random_method_room_with_wall():
 
     methods_with_weights = [
         MethodWithWeight(RoomCombinationsWithWalls.filter_color_and_quantity_wall, 5),
+        MethodWithWeight(RoomCombinationsWithWalls.room_has_wall_color, 3),
     ]
     random_method = get_weighted_random_method(methods_with_weights)
 
