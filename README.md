@@ -14,7 +14,23 @@ There are multiple parameters you can set within the config:
 - NR_TRIES: How many tries you want to do in total (with the default parameters ~1% of the total tries results in a playable scenario)
 - Most of the other parameters set the probability distribution of the different conditions 
 ### Run
-After setting up the config you can just run the run.py and your generated scenarios should appear in new_scenarios/pdfs
+If using PyCharm, after setting up the config you can just run the run.py and your generated scenarios should appear in new_scenarios/pdfs
+Otherwise you need to specify some more things:
+
+`cd <path-to-project-root> # Go into project's root directory`
+
+`python -m venv .venv # Create a virtual environment in .venv`
+
+`source .venv/bin/activate # Activate virtual environment for the current session`
+
+`export PYTHONPATH=<path-to-project-root> # Add search path, s.t. import-statements work`
+
+`cd commands # For now, since relative paths are used in code`
+python run.py`
+
+The activation of the virtual environment and the PYTHONPATH update must happen every time a new terminal session is started.
+
+Also a minimum python version (or at least the one with which this project is tested with) should be specified. At least the import statements only seem to work with 3.3+ (See here).
 
 ## Feedback
 I would be happy on every feedback, how your games were and what should be improved. Feel free to open an issue!
