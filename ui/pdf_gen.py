@@ -63,13 +63,6 @@ def gen_pdf_version(
                 else:
                     raise NotImplementedError
 
-            # Add enumeration with long test strings
-            # enumeration = [
-            #     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-            #     "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-            #     "For room livingroom, it applies: If at least 1 object has obj_type = lamp, then there must also be an object with style = retro.",
-            # ]
-
             # Print each condition as enumeration item
             initial_x = x + padding
             pdf.set_xy(initial_x, y + 20)
