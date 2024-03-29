@@ -30,7 +30,7 @@ python run.py`
 
 The activation of the virtual environment and the PYTHONPATH update must happen every time a new terminal session is started.
 
-Also a minimum python version (or at least the one with which this project is tested with) should be specified. At least the import statements only seem to work with 3.3+ (See here).
+Only tested for Python 3.9.
 
 ## Feedback
 I would be happy on every feedback, how your games were and what should be improved. Feel free to open an issue!
