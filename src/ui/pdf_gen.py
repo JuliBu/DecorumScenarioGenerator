@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import List
 
 from fpdf import FPDF
@@ -8,7 +9,7 @@ from ui.conditions import split_conds_to_4_players
 
 def gen_pdf_version(
     all_conds: List[ConditionOutput],
-    filename: str,
+    filename: Path,
     game_ident: str,
     nr_house_combs: int,
     language: str,
@@ -72,4 +73,4 @@ def gen_pdf_version(
                 # Reset x coordinate for subsequent items to match indentation
                 pdf.set_xy(initial_x, pdf.get_y() + 5)
 
-    pdf.output(filename)
+    pdf.output(str(filename))

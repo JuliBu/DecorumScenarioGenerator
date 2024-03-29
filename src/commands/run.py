@@ -77,6 +77,7 @@ def iter_modifications(gen_id: int):
             # print(f"{e}")
             pass
 
+    bedroom1_combs, bedroom2_combs, livingroom_combs, kitchen_combs = rooms_combs
     # Creating wall colors for all rooms
     bedroom1_wall_combs = RoomCombinationsWithWalls(bedroom1_combs.room_name, bedroom1_combs.object_combinations)
     bedroom2_wall_combs = RoomCombinationsWithWalls(bedroom2_combs.room_name, bedroom2_combs.object_combinations)
@@ -113,6 +114,7 @@ def iter_modifications(gen_id: int):
             # print(f"{e}")
             pass
 
+    bedroom1_wall_combs, bedroom2_wall_combs, livingroom_wall_combs, kitchen_wall_combs = wall_comb_rooms
     if len(bedroom1_wall_combs.room_wall_combinations) * len(bedroom2_wall_combs.room_wall_combinations) > MAX_COMBS_TO_CALC:
         raise TimeoutError("Too many combs to calc")
 
@@ -180,9 +182,7 @@ def iter_modifications(gen_id: int):
 
     if len(all_conds) == 12 and len(house_combs) < MAX_HOUSE_COMBINATIONS:
         print(f"Found a solution with 12 conditions: {SET_SEED}_{gen_id}!\n")
-        gen_pdf_version(all_conds, Path(
-            project_root_dir.parent / "new_scenarios" / "pdfs" / f"ger_{str(SET_SEED)}_{str(gen_id)}.pdf"),
-                        f"{SET_SEED}_{gen_id}", len(house_combs), "ger")
+        gen_pdf_version(all_conds, Path(project_root_dir.parent / "new_scenarios" / "pdfs" / f"ger_{str(SET_SEED)}_{str(gen_id)}.pdf"), f"{SET_SEED}_{gen_id}", len(house_combs), "ger")
         gen_pdf_version(all_conds, Path(
             project_root_dir.parent / "new_scenarios" / "pdfs" / f"eng_{str(SET_SEED)}_{str(gen_id)}.pdf"),
                         f"{SET_SEED}_{gen_id}", len(house_combs), "eng")
