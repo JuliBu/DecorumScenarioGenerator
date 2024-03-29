@@ -81,8 +81,10 @@ def iter_modifications(gen_id: int):
 
     if len(all_conds) == 12:
         print(f"Found a solution with 12 conditions: {SET_SEED}_{gen_id}!\n")
-        gen_pdf_version(all_conds, f"../new_scenarios/pdfs/ger_{str(SET_SEED)}_{str(gen_id)}.pdf", f"{SET_SEED}_{gen_id}", len(house_combs), "ger")
-        gen_pdf_version(all_conds, f"../new_scenarios/pdfs/eng_{str(SET_SEED)}_{str(gen_id)}.pdf", f"{SET_SEED}_{gen_id}", len(house_combs), "eng")
+        gen_pdf_version(all_conds, f"../new_scenarios/pdfs/ger_{str(SET_SEED)}_{str(gen_id)}.pdf",
+                        f"{SET_SEED}_{gen_id}", len(house_combs), "ger")
+        gen_pdf_version(all_conds, f"../new_scenarios/pdfs/eng_{str(SET_SEED)}_{str(gen_id)}.pdf",
+                        f"{SET_SEED}_{gen_id}", len(house_combs), "eng")
     player_1_conds, player_2_conds, player_3_conds, player_4_conds = split_conds_to_4_players(all_conds)
     for idx, player_conds in enumerate([player_1_conds, player_2_conds, player_3_conds, player_4_conds]):
         if SHOW_PRINTS:

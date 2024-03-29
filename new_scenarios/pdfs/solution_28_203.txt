@@ -1,8 +1,0 @@
-
-One possible solution (bedroom1, bedroom2, livingroom, kitchen), (bedroom1_players, bedroom2_players):
-(('red', 'green', None), 'green') 
-(('red', None, 'red'), 'red') 
-(('red', None, 'blue'), 'green') 
-((None, 'blue', 'blue'), 'blue') 
-{2, 3}
-{1, 4}

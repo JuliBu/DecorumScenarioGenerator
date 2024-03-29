@@ -1,0 +1,8 @@
+
+One possible solution (bedroom1, bedroom2, livingroom, kitchen), (bedroom1_players, bedroom2_players):
+(('green', None, 'yellow'), 'red') 
+((None, 'yellow', 'green'), 'red') 
+(('yellow', 'blue', None), 'red') 
+((None, None, 'yellow'), 'yellow') 
+{1, 2}
+{3, 4}
