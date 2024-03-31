@@ -6,6 +6,7 @@
 - In new_scenarios/pdfs, there are some examples of generated scenarios if you just want to play a new scenario.
 - All scenarios use the back-side of the board where the players live in the two bedrooms.
 - For playing it could be useful to print every sheet two times, s.t. each player receives one sheet for his own and can cut the second one in snippets to forward them to the other players after every 5 rounds.
+- The number of combs on top of each sheet tells you the number of different possible solution. So scenarios with small numbers are in principle more difficult than those with high numbers.
 - There is also one possible solution per scenario calculated and given in the pdfs folder.
 ## Functionality
 If you want to create new scenarios, you need to pip-install `fpdf` for generating the pdf output, as well as `tqdm` for displaying a progress bar.
