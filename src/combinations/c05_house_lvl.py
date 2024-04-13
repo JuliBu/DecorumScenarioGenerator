@@ -150,10 +150,10 @@ class HouseCombinations:
             nr_found_items = Counter(objs_attr)[compare_val]
 
             if mode_equal == "min":
-                if nr_found_items > nr_elems_of_attr:
+                if nr_found_items >= nr_elems_of_attr:
                     new_combs.append(house_comb)
             elif mode_equal == "max":
-                if nr_found_items < nr_elems_of_attr:
+                if nr_found_items <= nr_elems_of_attr:
                     new_combs.append(house_comb)
             elif mode_equal == "equal":
                 if nr_found_items == nr_elems_of_attr:
